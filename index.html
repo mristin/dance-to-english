@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dance-to-english</title>
+    <script src="game.js"></script>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<button id="press-start">Press here when you are ready to start.</button>
+
+<div id="container">
+    <div id="answer-container">
+        <button id="left-answer" class="answer">
+            &leftarrow;
+        </button>
+        <button id="right-answer" class="answer">
+            &rightarrow;
+        </button>
+    </div>
+
+    <div id="bravo-container">
+        <div id="bravo">👏 Bravo! 👏</div>
+        <button id="restart">Restart</button>
+    </div>
+
+    <div id="score">
+        💎💎💎
+    </div>
+
+    <div id="gamepad-container">
+        <label for="gamepad-select">
+            Gamepad to use (please press any button to make the gamepad visible to the browser):
+        </label>
+        <select id="gamepad-select" onselect="changeActiveGamepad();">
+        </select>
+    </div>
+</div>
+</body>
+</html>
