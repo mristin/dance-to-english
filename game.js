@@ -14,7 +14,27 @@ function newState() {
             {question: "dog", answer: "🐕"},
             {question: "tiger", answer: "🐅"},
             {question: "cow", answer:"🐄"},
-            {question: "lion", answer: "🦁"}
+            {question: "lion", answer: "🦁"},
+            {question: "pig", answer: "🐖"},
+            {question: "sheep", answer: "🐑"},
+            {question: "goat", answer: "🐐"},
+            {question: "seal", answer: "🦭"},
+            {question: "whale", answer: "🐋"},
+            {question: "dolphin", answer: "🐬"},
+            {question: "spider", answer: "🕷️"},
+            {question: "ant", answer: "🐜"},
+            {question: "bee", answer: "🐝"},
+            {question: "snail", answer: "🐌"},
+            {question: "giraffe", answer: "🦒"},
+            {question: "monkey", answer: "🐒"},
+            {question: "bird", answer: "🐦"},
+            {question: "eagle", answer: "🦅"},
+            {question: "fish", answer: "🐟"},
+            {question: "shark", answer: "🦈"},
+            {question: "squirrel", answer: "🐿️"},
+            {question: "deer", answer: "🦌"},
+            {question: "turtle", answer: "🐢"},
+            {question: "hedgehog", answer: "🦔"}
         ],
         remainingQuestions: [],
         questionIndex: null,
@@ -116,6 +136,7 @@ function initialize() {
     State = newState();
     initializeQuestions();
     initializeSpeechSynthesis();
+
     askTheQuestion();
 }
 
