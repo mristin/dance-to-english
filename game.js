@@ -13,7 +13,7 @@ function newState() {
             {question: "cat", answer: "🐈"},
             {question: "dog", answer: "🐕"},
             {question: "tiger", answer: "🐅"},
-            {question: "cow", answer:"🐄"},
+            {question: "cow", answer: "🐄"},
             {question: "lion", answer: "🦁"},
             {question: "pig", answer: "🐖"},
             {question: "sheep", answer: "🐑"},
@@ -41,7 +41,8 @@ function newState() {
         score: 0,
         gameOver: false,
         speechSynthesisVoice: null,
-        lastButtonState: null
+        buttonsPressed: null,
+        buttonsPressTimestamps: null
     };
 }
 
@@ -298,7 +299,10 @@ function reactOnButtonPress(buttonIndex) {
     }
 }
 
-function reactOnActiveGamepad() {
+/**
+ * @param {number} timestamp
+ */
+function reactOnActiveGamepad(timestamp) {
     if (State.gamepads.length === 0) {
         return;
     }
@@ -312,23 +316,49 @@ function reactOnActiveGamepad() {
      */
     const gamepad = State.gamepads[State.activeGamepadIndex];
 
-    const newState = gamepad.buttons.map(button => button.pressed);
+    const newButtonsPressed = gamepad.buttons.map(button => button.pressed);
 
-    if (State.lastButtonState === null || State.lastButtonState.length !== newState.length) {
-        for (let i = 0; i < newState.length; i++) {
-            if (newState[i]) {
+
+    if (State.buttonsPressed === null || State.buttonsPressed.length !== newButtonsPressed.length) {
+        State.buttonsPressTimestamps = newButtonsPressed.map(() => 0);
+
+        for (let i = 0; i < newButtonsPressed.length; i++) {
+            if (newButtonsPressed[i]) {
+                State.buttonsPressTimestamps[i] = timestamp;
                 reactOnButtonPress(i);
             }
         }
     } else {
-        for (let i = 0; i < newState.length; i++) {
-            if (newState[i] && !State.lastButtonState[i]) {
-                reactOnButtonPress(i);
+        if (State.buttonsPressTimestamps === null) {
+            throw new Error("Buttons press-timestamps must be set when buttons pressed is set.")
+        }
+
+        if (State.buttonsPressTimestamps.length !== State.buttonsPressed.length) {
+            throw new Error(
+                "Expected length of button press-timestamps to match " +
+                State.buttonsPressed.left +
+                ", i.e., buttons pressed, but got: " +
+                State.buttonsPressTimestamps.length
+            )
+        }
+
+
+        for (let i = 0; i < newButtonsPressed.length; i++) {
+            if (newButtonsPressed[i] && !State.buttonsPressed[i]) {
+                const oldTimestamp = State.buttonsPressTimestamps[i]
+                const delta = timestamp - oldTimestamp;
+
+                // NOTE (mristin):
+                // Debounce after a second
+                if (delta > 1000) {
+                    State.buttonsPressTimestamps[i] = timestamp;
+                    reactOnButtonPress(i);
+                }
             }
         }
     }
 
-    State.lastButtonState = newState;
+    State.buttonsPressed = newButtonsPressed;
 }
 
 function playMistake() {
@@ -417,9 +447,12 @@ function sayHi() {
     setTimeout(() => window.speechSynthesis.speak(utterance), 500);
 }
 
-function handleFrame() {
+/**
+ * @param {number} timestamp
+ */
+function handleFrame(timestamp) {
     updateGamepads();
-    reactOnActiveGamepad();
+    reactOnActiveGamepad(timestamp);
 
     refresh();
 
@@ -442,8 +475,7 @@ function main() {
     document.getElementById("right-answer").onclick = () => answer(1);
     document.getElementById("restart").onclick = initialize;
     if (State.speechSynthesisVoice === null) {
-        // TODO: uncomment
-        // alert("Currently, your browser does not support speech synthesis.")
+        alert("Currently, your browser does not support speech synthesis.")
     }
 
     requestAnimationFrame(handleFrame);
