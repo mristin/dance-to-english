@@ -8,7 +8,13 @@ function newState() {
             {question: "wolf", answer: "🐺"},
             {question: "snake", answer: "🐍"},
             {question: "elephant", answer: "🐘"},
-            {question: "dragon", answer: "🐲"}
+            {question: "dragon", answer: "🐲"},
+            {question: "bear", answer: "🐻"},
+            {question: "cat", answer: "🐈"},
+            {question: "dog", answer: "🐕"},
+            {question: "tiger", answer: "🐅"},
+            {question: "cow", answer:"🐄"},
+            {question: "lion", answer: "🦁"}
         ],
         remainingQuestions: [],
         questionIndex: null,
