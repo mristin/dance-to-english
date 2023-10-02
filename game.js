@@ -134,6 +134,13 @@ function initializeQuestions() {
             }
         }
 
+        if (answers.length !== 2) {
+            throw new Error(
+                "Expected exactly 2 answers, " +
+                "but got " + answers.length + " answer(s) for question " + card.question
+            )
+        }
+
         remainingQuestions.push(
             {
                 question: card.question,
@@ -209,7 +216,32 @@ function refreshQuestion() {
     const answerContainer = document.getElementById("answer-container");
 
     if (State.remainingQuestions.length > 0) {
+        if (State.questionIndex === null) {
+            throw new Error(
+                "Expected question index to be set when there are " + State.remainingQuestions.length +
+                " remaining questions still available."
+            )
+        }
+        if (State.questionIndex >= State.remainingQuestions.length) {
+            throw new Error(
+                "Unexpected question index " + State.questionIndex +
+                " when there are " + State.remainingQuestions.length + " remaining question(s)."
+            )
+        }
+
         const question = State.remainingQuestions[State.questionIndex];
+
+        if (question === undefined) {
+            throw new Error(
+                "Unexpected undefined question for question index " + State.questionIndex + " and when there are " +
+                State.remainingQuestions.length + " remaining question(s)."
+            )
+        }
+
+        if (question.answers === undefined) {
+            console.error("question", question)
+            throw new Error("Unexpected undefined answers for a question, see error log.")
+        }
 
         updateInnerTextIfNeeded(
             document.getElementById("left-answer"),
@@ -426,7 +458,7 @@ function reactOnActiveGamepad(timestamp) {
         throw new Error("Unexpected unset buttons press-timestamps at the end of react-on-active-gamepad.")
     }
 
-    for(let i = 0; i < buttonPresses.length; i++) {
+    for (let i = 0; i < buttonPresses.length; i++) {
         reactOnButtonPress(buttonPresses[i]);
     }
 }
@@ -460,13 +492,25 @@ function answer(direction) {
     if (State.questionIndex === null) {
         throw new Error("Expected question index to be set when remaining questions still available.")
     }
+    if (State.questionIndex >= State.remainingQuestions.length) {
+        throw new Error(
+            "Unexpected question index " + State.questionIndex +
+            " when there are " + State.remainingQuestions.length + " remaining question(s)."
+        )
+    }
 
     const question = State.remainingQuestions[State.questionIndex];
     if (question.correctAnswerIndex === direction) {
         playSuccess();
 
-        const solvedQuestion = State.remainingQuestions.splice(State.questionIndex, 1);
-        State.solvedQuestions.push(solvedQuestion);
+        const solvedQuestionAsArray = State.remainingQuestions.splice(State.questionIndex, 1);
+        if (solvedQuestionAsArray.length !== 1) {
+            throw new Error(
+                "Expected exactly one question to be removed from remaining questions, " +
+                "but we removed " + solvedQuestionAsArray.length)
+        }
+
+        State.solvedQuestions.push(solvedQuestionAsArray[0]);
 
         State.trollDistance = Math.max(trollMaxDistance, State.trollDistance + 1);
 
@@ -492,6 +536,12 @@ function askTheQuestion() {
     }
     if (State.questionIndex === null) {
         throw new Error("Expected question index to be set when remaining questions still available.")
+    }
+    if (State.questionIndex >= State.remainingQuestions.length) {
+        throw new Error(
+            "Unexpected question index " + State.questionIndex +
+            " when there are " + State.remainingQuestions.length + " remaining question(s)."
+        )
     }
 
     const question = State.remainingQuestions[State.questionIndex];
@@ -539,6 +589,13 @@ function updatetroll(timestamp) {
         if (State.trollDistance === 0) {
             playStolen();
             const stolenQuestion = State.solvedQuestions.pop();
+            if (stolenQuestion === undefined) {
+                throw new Error(
+                    "Stolen question was undefined. The question index is " + State.questionIndex + ", " +
+                    "while there are " + State.solvedQuestions.length + " solved question(s) " +
+                    "and " + State.remainingQuestions + " remaining question(s)."
+                )
+            }
             State.remainingQuestions.push(stolenQuestion);
         }
 
