@@ -1,3 +1,5 @@
+const trollMaxDistance = 5;
+
 function newState() {
     return {
         gamepads: [],
@@ -74,12 +76,15 @@ function newState() {
             {question: "penguin", answer: "🐧"}
         ],
         remainingQuestions: [],
+        solvedQuestions: [],
         questionIndex: null,
-        score: 0,
         gameOver: false,
         speechSynthesisVoice: null,
         buttonsPressed: null,
-        buttonsPressTimestamps: null
+        buttonsPressTimestamps: null,
+        trollDistance: 1,
+        trollDirection: 1,
+        trollTimestamp: 0
     };
 }
 
@@ -226,7 +231,7 @@ function refreshScore() {
      * @type {Array<string>}
      */
     const diamonds = [];
-    for (let i = 0; i < State.score; i++) {
+    for (let i = 0; i < State.solvedQuestions.length; i++) {
         diamonds.push("💎");
     }
 
@@ -276,12 +281,20 @@ function refreshGamepads() {
     }
 }
 
+function refreshtroll() {
+    const parts = [];
+    for (let i = 0; i < State.trollDistance; i++) {
+        parts.push("&nbsp;");
+    }
+    document.getElementById("troll-distance").innerHTML = parts.join("");
+}
 
 function refresh() {
     refreshGamepads();
     refreshQuestion();
     refreshBravo();
     refreshScore();
+    refreshtroll();
 }
 
 function changeActiveGamepad() {
@@ -428,6 +441,11 @@ function playSuccess() {
     audio.play().catch(reason => console.error("Failed to play positive sound", reason));
 }
 
+function playStolen() {
+    const audio = new Audio("stone.mp3");
+    audio.play().catch(reason => console.error("Failed to play positive sound", reason));
+}
+
 /**
  * Effectuate an answer.
  * @param {number} direction
@@ -447,9 +465,10 @@ function answer(direction) {
     if (question.correctAnswerIndex === direction) {
         playSuccess();
 
-        State.score++;
+        const solvedQuestion = State.remainingQuestions.splice(State.questionIndex, 1);
+        State.solvedQuestions.push(solvedQuestion);
 
-        State.remainingQuestions.splice(State.questionIndex, 1);
+        State.trollDistance = Math.max(trollMaxDistance, State.trollDistance + 1);
 
         if (State.remainingQuestions.length === 0) {
             State.gameOver = true;
@@ -504,12 +523,39 @@ function sayHi() {
     setTimeout(() => window.speechSynthesis.speak(utterance), 500);
 }
 
+function updatetroll(timestamp) {
+    const temporalDelta = timestamp - State.trollTimestamp;
+    if (State.solvedQuestions.length > 0 && temporalDelta > 1000) {
+        const spatialDelta = Math.round(temporalDelta / 1000);
+        State.trollDistance = Math.min(
+            Math.max(0, State.trollDistance + State.trollDirection * spatialDelta),
+            trollMaxDistance
+        );
+
+        if (State.trollDistance === 0 || State.trollDistance === trollMaxDistance) {
+            State.trollDirection = -1 * State.trollDirection;
+        }
+
+        if (State.trollDistance === 0) {
+            playStolen();
+            const stolenQuestion = State.solvedQuestions.pop();
+            State.remainingQuestions.push(stolenQuestion);
+        }
+
+        State.trollTimestamp = timestamp;
+    }
+}
+
 /**
  * @param {number} timestamp
  */
 function handleFrame(timestamp) {
     updateGamepads();
     reactOnActiveGamepad(timestamp);
+
+    if (!State.gameOver) {
+        updatetroll(timestamp);
+    }
 
     refresh();
 
