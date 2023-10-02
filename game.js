@@ -70,7 +70,8 @@ function newState() {
             {question: "scorpion", answer: "🦂"},
             {question: "butterfly", answer: "🦋"},
             {question: "caterpillar", answer: "🐛"},
-            {question: "ladybug", answer: "🐞"}
+            {question: "ladybug", answer: "🐞"},
+            {question: "penguin", answer: "🐧"}
         ],
         remainingQuestions: [],
         questionIndex: null,
