@@ -355,6 +355,12 @@ function reactOnActiveGamepad(timestamp) {
 
     const newButtonsPressed = gamepad.buttons.map(button => button.pressed);
 
+    /**
+     * React on the button presses at the end of this function since we are changing the state and this is not
+     * a good idea to react on event *before* the state is in a valid shape.
+     * @type {Array<number>}
+     */
+    const buttonPresses = [];
 
     if (State.buttonsPressed === null || State.buttonsPressed.length !== newButtonsPressed.length) {
         State.buttonsPressTimestamps = newButtonsPressed.map(() => 0);
@@ -362,9 +368,11 @@ function reactOnActiveGamepad(timestamp) {
         for (let i = 0; i < newButtonsPressed.length; i++) {
             if (newButtonsPressed[i]) {
                 State.buttonsPressTimestamps[i] = timestamp;
-                reactOnButtonPress(i);
+                buttonPresses.push(i);
             }
         }
+
+        State.buttonsPressed = newButtonsPressed;
     } else {
         if (State.buttonsPressTimestamps === null) {
             throw new Error("Buttons press-timestamps must be set when buttons pressed is set.")
@@ -389,13 +397,25 @@ function reactOnActiveGamepad(timestamp) {
                 // Debounce after a second
                 if (delta > 1000) {
                     State.buttonsPressTimestamps[i] = timestamp;
-                    reactOnButtonPress(i);
+                    buttonPresses.push(i);
                 }
             }
         }
+
+        State.buttonsPressed = newButtonsPressed;
     }
 
-    State.buttonsPressed = newButtonsPressed;
+    if (State.buttonsPressed === null) {
+        throw new Error("Unexpected unset buttons pressed at the end of react-on-active-gamepad.")
+    }
+
+    if (State.buttonsPressTimestamps === null) {
+        throw new Error("Unexpected unset buttons press-timestamps at the end of react-on-active-gamepad.")
+    }
+
+    for(let i = 0; i < buttonPresses.length; i++) {
+        reactOnButtonPress(buttonPresses[i]);
+    }
 }
 
 function playMistake() {
