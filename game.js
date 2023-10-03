@@ -1,4 +1,4 @@
-const trollMaxDistance = 5;
+const thiefMaxDistance = 5;
 
 // NOTE (mristin):
 // We distinguish between two types of states. The one state is the state of the overall
@@ -92,9 +92,9 @@ function newState() {
         solvedQuestions: [],
         questionIndex: null,
         gameOver: false,
-        trollDistance: 1,
-        trollDirection: 1,
-        trollTimestamp: 0
+        thiefDistance: 1,
+        thiefDirection: 1,
+        thiefTimestamp: 0
     };
 }
 
@@ -321,12 +321,12 @@ function refreshGamepads() {
     }
 }
 
-function refreshTroll() {
+function refreshThief() {
     const parts = [];
-    for (let i = 0; i < GameState.trollDistance; i++) {
+    for (let i = 0; i < GameState.thiefDistance; i++) {
         parts.push("&nbsp;");
     }
-    document.getElementById("troll-distance").innerHTML = parts.join("");
+    document.getElementById("thief-distance").innerHTML = parts.join("");
 }
 
 function refresh() {
@@ -334,7 +334,7 @@ function refresh() {
     refreshQuestion();
     refreshBravo();
     refreshScore();
-    refreshTroll();
+    refreshThief();
 }
 
 function changeActiveGamepad() {
@@ -523,7 +523,7 @@ function answer(direction) {
 
         GameState.solvedQuestions.push(solvedQuestionAsArray[0]);
 
-        GameState.trollDistance = Math.max(trollMaxDistance, GameState.trollDistance + 1);
+        GameState.thiefDistance = Math.max(thiefMaxDistance, GameState.thiefDistance + 1);
 
         if (GameState.remainingQuestions.length === 0) {
             GameState.gameOver = true;
@@ -572,20 +572,20 @@ function askTheQuestion() {
     setTimeout(() => window.speechSynthesis.speak(utterance), 500);
 }
 
-function updateTroll(timestamp) {
-    const temporalDelta = timestamp - GameState.trollTimestamp;
+function updateThief(timestamp) {
+    const temporalDelta = timestamp - GameState.thiefTimestamp;
     if (GameState.solvedQuestions.length > 0 && temporalDelta > 1000) {
         const spatialDelta = Math.round(temporalDelta / 1000);
-        GameState.trollDistance = Math.min(
-            Math.max(0, GameState.trollDistance + GameState.trollDirection * spatialDelta),
-            trollMaxDistance
+        GameState.thiefDistance = Math.min(
+            Math.max(0, GameState.thiefDistance + GameState.thiefDirection * spatialDelta),
+            thiefMaxDistance
         );
 
-        if (GameState.trollDistance === 0 || GameState.trollDistance === trollMaxDistance) {
-            GameState.trollDirection = -1 * GameState.trollDirection;
+        if (GameState.thiefDistance === 0 || GameState.thiefDistance === thiefMaxDistance) {
+            GameState.thiefDirection = -1 * GameState.thiefDirection;
         }
 
-        if (GameState.trollDistance === 0) {
+        if (GameState.thiefDistance === 0) {
             playStolen();
             const stolenQuestion = GameState.solvedQuestions.pop();
             if (stolenQuestion === undefined) {
@@ -598,7 +598,7 @@ function updateTroll(timestamp) {
             GameState.remainingQuestions.push(stolenQuestion);
         }
 
-        GameState.trollTimestamp = timestamp;
+        GameState.thiefTimestamp = timestamp;
     }
 }
 
@@ -610,7 +610,7 @@ function handleFrame(timestamp) {
     reactOnActiveGamepad(timestamp);
 
     if (!GameState.gameOver) {
-        updateTroll(timestamp);
+        updateThief(timestamp);
     }
 
     refresh();
