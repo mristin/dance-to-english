@@ -213,7 +213,7 @@ function setupSpeechSynthesis() {
 
 function announce(text) {
     if (SystemState.speechSynthesisVoice === null) {
-        return;
+        return new Promise((resolve, reject) => {resolve()});
     }
 
     let utterance = new SpeechSynthesisUtterance();
