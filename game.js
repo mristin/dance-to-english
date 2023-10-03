@@ -486,7 +486,7 @@ function playSuccess() {
 function playStolen() {
     const audio = new Audio("stone.mp3");
     audio.volume = 0.1;
-    audio.play().catch(reason => console.error("Failed to play positive sound", reason));
+    audio.play().catch(reason => console.error("Failed to play stolen sound", reason));
 }
 
 /**
