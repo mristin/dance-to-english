@@ -47,3 +47,12 @@
 #press-start {
     font-size: 5em;
 }
+
+#hello-container {
+    padding: 0.5em;
+    margin: 0.5em;
+    text-align: center;
+}
+#hello {
+    font-size: 5em;
+}
