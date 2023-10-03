@@ -93,7 +93,14 @@ function newState() {
             {question: "butterfly", answer: "🦋"},
             {question: "caterpillar", answer: "🐛"},
             {question: "ladybug", answer: "🐞"},
-            {question: "penguin", answer: "🐧"}
+            {question: "penguin", answer: "🐧"},
+            {question: "hamster", answer: "🐹"},
+            {question: "otter", answer: "🦦"},
+            {question: "parrot", answer: "🦜"},
+            {question: "flamingo", answer: "🦩"},
+            {question: "mammoth", answer: "🦣"},
+            {question: "pigeon", answer: "🕊️"},
+            {question: "wild boar", answer: "🐗"}
         ],
         remainingQuestions: [],
         solvedQuestions: [],
