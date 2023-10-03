@@ -465,16 +465,19 @@ function reactOnActiveGamepad(timestamp) {
 
 function playMistake() {
     const audio = new Audio("negative.mp3");
+    audio.volume = 0.1;
     audio.play().catch(reason => console.error("Failed to play negative sound", reason));
 }
 
 function playSuccess() {
     const audio = new Audio("positive.mp3");
+    audio.volume = 0.1;
     audio.play().catch(reason => console.error("Failed to play positive sound", reason));
 }
 
 function playStolen() {
     const audio = new Audio("stone.mp3");
+    audio.volume = 0.1;
     audio.play().catch(reason => console.error("Failed to play positive sound", reason));
 }
 
