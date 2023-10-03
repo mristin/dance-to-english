@@ -15,6 +15,13 @@ const SystemState = {
     buttonsPressTimestamps: null
 }
 
+const Dialogues = {
+    Hello: 0,
+    Playing: 1,
+    GameOver: 2
+}
+
+
 function newState() {
     return {
         vocabulary: [
@@ -91,10 +98,12 @@ function newState() {
         remainingQuestions: [],
         solvedQuestions: [],
         questionIndex: null,
-        gameOver: false,
         thiefDistance: 1,
         thiefDirection: 1,
-        thiefTimestamp: 0
+        thiefTimestamp: 0,
+        // NOTE (mristin):
+        // Split the state across dialogues in the future.
+        dialogue: Dialogues.Hello
     };
 }
 
@@ -188,14 +197,63 @@ function setupSpeechSynthesis() {
     }
 }
 
+function announce(text) {
+    if (SystemState.speechSynthesisVoice === null) {
+        return;
+    }
+
+    let utterance = new SpeechSynthesisUtterance();
+    utterance.text = text;
+    utterance.voice = SystemState.speechSynthesisVoice;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance)
+
+    return new Promise((resolve, reject) => {
+        utterance.onend = resolve;
+        utterance.onerror = reject
+    })
+}
+
+const hiMessages = [
+    "Hello! Let's start!",
+    "Hi! Let's get ready!",
+    "Ready. Steady. Go!"
+]
+
+function sayHi() {
+    const messageIndex = Math.floor(Math.random() * hiMessages.length);
+    return announce(hiMessages[messageIndex]);
+}
+
+const bravoMessages = [
+    "Bravo!",
+    "Well done!",
+    "Good job!",
+    "Great job!",
+    "Congratulations!"
+]
+
+function sayBravo() {
+    const messageIndex = Math.floor(Math.random() * bravoMessages.length);
+    return announce(bravoMessages[messageIndex]);
+}
+
 /**
  * Initialize the state.
  */
 function initialize() {
     GameState = newState();
-    initializeQuestions();
 
-    askTheQuestion();
+    GameState.dialogue = Dialogues.Hello;
+    sayHi()
+        .then(() => {
+            GameState.dialogue = Dialogues.Playing;
+
+            initializeQuestions();
+            askTheQuestion();
+        })
+        .catch((err) => console.error("Failed to say hi", err))
 }
 
 /**
@@ -221,49 +279,47 @@ function updateDisplayIfNeeded(element, display) {
 }
 
 function refreshQuestion() {
-    const answerContainer = document.getElementById("answer-container");
-
-    if (GameState.remainingQuestions.length > 0) {
-        if (GameState.questionIndex === null) {
-            throw new Error(
-                "Expected question index to be set when there are " + GameState.remainingQuestions.length +
-                " remaining questions still available."
-            )
-        }
-        if (GameState.questionIndex >= GameState.remainingQuestions.length) {
-            throw new Error(
-                "Unexpected question index " + GameState.questionIndex +
-                " when there are " + GameState.remainingQuestions.length + " remaining question(s)."
-            )
-        }
-
-        const question = GameState.remainingQuestions[GameState.questionIndex];
-
-        if (question === undefined) {
-            throw new Error(
-                "Unexpected undefined question for question index " + GameState.questionIndex + " and when there are " +
-                GameState.remainingQuestions.length + " remaining question(s)."
-            )
-        }
-
-        if (question.answers === undefined) {
-            console.error("question", question)
-            throw new Error("Unexpected undefined answers for a question, see error log.")
-        }
-
-        updateInnerTextIfNeeded(
-            document.getElementById("left-answer"),
-            question.answers[0].text
-        );
-        updateInnerTextIfNeeded(
-            document.getElementById("right-answer"),
-            question.answers[1].text
-        );
-
-        updateDisplayIfNeeded(answerContainer, "");
-    } else {
-        updateDisplayIfNeeded(answerContainer, "none");
+    if (GameState.remainingQuestions.length === 0) {
+        throw new Error(
+            "Unexpected no remaining questions when answer container is refreshed."
+        )
     }
+
+    if (GameState.questionIndex === null) {
+        throw new Error(
+            "Expected question index to be set when there are " + GameState.remainingQuestions.length +
+            " remaining questions still available."
+        )
+    }
+    if (GameState.questionIndex >= GameState.remainingQuestions.length) {
+        throw new Error(
+            "Unexpected question index " + GameState.questionIndex +
+            " when there are " + GameState.remainingQuestions.length + " remaining question(s)."
+        )
+    }
+
+    const question = GameState.remainingQuestions[GameState.questionIndex];
+
+    if (question === undefined) {
+        throw new Error(
+            "Unexpected undefined question for question index " + GameState.questionIndex + " and when there are " +
+            GameState.remainingQuestions.length + " remaining question(s)."
+        )
+    }
+
+    if (question.answers === undefined) {
+        console.error("question", question)
+        throw new Error("Unexpected undefined answers for a question, see error log.")
+    }
+
+    updateInnerTextIfNeeded(
+        document.getElementById("left-answer"),
+        question.answers[0].text
+    );
+    updateInnerTextIfNeeded(
+        document.getElementById("right-answer"),
+        question.answers[1].text
+    );
 }
 
 function refreshScore() {
@@ -281,20 +337,6 @@ function refreshScore() {
         text
     );
 }
-
-function refreshBravo() {
-    const bravoContainer = document.getElementById("bravo-container");
-    const answerContainer = document.getElementById("answer-container");
-
-    if (GameState.remainingQuestions.length === 0) {
-        updateDisplayIfNeeded(bravoContainer, "");
-        updateDisplayIfNeeded(answerContainer, "none");
-    } else {
-        updateDisplayIfNeeded(bravoContainer, "none");
-        updateDisplayIfNeeded(answerContainer, "");
-    }
-}
-
 
 function refreshGamepads() {
     /**
@@ -331,10 +373,34 @@ function refreshThief() {
 
 function refresh() {
     refreshGamepads();
-    refreshQuestion();
-    refreshBravo();
-    refreshScore();
-    refreshThief();
+
+    const helloContainer = document.getElementById("hello-container");
+    const answerContainer = document.getElementById("answer-container");
+    const terrain = document.getElementById("terrain");
+    const bravoContainer = document.getElementById("bravo-container");
+
+    if (GameState.dialogue === Dialogues.Hello) {
+        updateDisplayIfNeeded(helloContainer, "");
+        updateDisplayIfNeeded(answerContainer, "none");
+        updateDisplayIfNeeded(terrain, "none");
+        updateDisplayIfNeeded(bravoContainer, "none");
+    } else if (GameState.dialogue === Dialogues.Playing) {
+        refreshQuestion();
+        refreshScore();
+        refreshThief();
+
+        updateDisplayIfNeeded(helloContainer, "none");
+        updateDisplayIfNeeded(answerContainer, "");
+        updateDisplayIfNeeded(terrain, "");
+        updateDisplayIfNeeded(bravoContainer, "none");
+    } else if (GameState.dialogue === Dialogues.GameOver) {
+        updateDisplayIfNeeded(helloContainer, "none");
+        updateDisplayIfNeeded(answerContainer, "none");
+        updateDisplayIfNeeded(terrain, "none");
+        updateDisplayIfNeeded(bravoContainer, "");
+    } else {
+        throw new Error("Unhandled dialogue: " + GameState.dialogue)
+    }
 }
 
 function changeActiveGamepad() {
@@ -374,18 +440,22 @@ function updateGamepads() {
 }
 
 function reactOnButtonPress(buttonIndex) {
-    if (!GameState.gameOver) {
+    if (GameState.dialogue === Dialogues.Playing) {
         if (buttonIndex === 0) {
             answer(0);
         } else if (buttonIndex === 3) {
             answer(1);
+        } else if (buttonIndex === 9) {
+            initialize()
         } else {
             // Pass.
         }
-    }
-
-    if (buttonIndex === 9) {
-        initialize()
+    } else if (GameState.dialogue === Dialogues.GameOver) {
+        if (buttonIndex === 9) {
+            initialize()
+        }
+    } else {
+        // Pass.
     }
 }
 
@@ -526,8 +596,14 @@ function answer(direction) {
         GameState.thiefDistance = Math.max(thiefMaxDistance, GameState.thiefDistance + 1);
 
         if (GameState.remainingQuestions.length === 0) {
-            GameState.gameOver = true;
+            // Finish the game
             GameState.questionIndex = null;
+            GameState.dialogue = Dialogues.GameOver;
+
+            sayBravo().catch((err) => {
+                console.error("Failed to say bravo", err)
+            });
+
         } else {
             GameState.questionIndex = GameState.questionIndex % GameState.remainingQuestions.length;
             askTheQuestion();
@@ -569,7 +645,13 @@ function askTheQuestion() {
     utterance.voice = SystemState.speechSynthesisVoice;
 
     // Delay a bit so that we do not conflict with the feedback sounds
-    setTimeout(() => window.speechSynthesis.speak(utterance), 500);
+    setTimeout(
+        () => {
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        },
+        500
+    );
 }
 
 function updateThief(timestamp) {
@@ -577,11 +659,17 @@ function updateThief(timestamp) {
     if (GameState.solvedQuestions.length > 0 && temporalDelta > 1000) {
         const spatialDelta = Math.round(temporalDelta / 1000);
         GameState.thiefDistance = Math.min(
-            Math.max(0, GameState.thiefDistance + GameState.thiefDirection * spatialDelta),
+            Math.max(
+                0,
+                GameState.thiefDistance + GameState.thiefDirection * spatialDelta
+            ),
             thiefMaxDistance
         );
 
-        if (GameState.thiefDistance === 0 || GameState.thiefDistance === thiefMaxDistance) {
+        if (
+            GameState.thiefDistance === 0
+            || GameState.thiefDistance === thiefMaxDistance
+        ) {
             GameState.thiefDirection = -1 * GameState.thiefDirection;
         }
 
@@ -602,6 +690,7 @@ function updateThief(timestamp) {
     }
 }
 
+
 /**
  * @param {number} timestamp
  */
@@ -609,7 +698,7 @@ function handleFrame(timestamp) {
     updateGamepads();
     reactOnActiveGamepad(timestamp);
 
-    if (!GameState.gameOver) {
+    if (GameState.dialogue === Dialogues.Playing) {
         updateThief(timestamp);
     }
 
