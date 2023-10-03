@@ -1,9 +1,22 @@
 const trollMaxDistance = 5;
 
+// NOTE (mristin):
+// We distinguish between two types of states. The one state is the state of the overall
+// system such as voice selection and gamepad selection. When the game restarts, the system state
+// should not be affected. On the other hand, the other state, the game state, concerns only
+// the game logic and is devoid of any system concerns such as buttons pressed *etc.*
+
+
+const SystemState = {
+    gamepads: [],
+    activeGamepadIndex: null,
+    speechSynthesisVoice: null,
+    buttonsPressed: null,
+    buttonsPressTimestamps: null
+}
+
 function newState() {
     return {
-        gamepads: [],
-        activeGamepadIndex: null,
         vocabulary: [
             {question: "rabbit", answer: "🐇"},
             {question: "fox", answer: "🦊"},
@@ -62,7 +75,7 @@ function newState() {
             {question: "koala", answer: "🐨"},
             {question: "gorilla", answer: "🦍"},
             {question: "sloth", answer: "🦥"},
-            {question:"panda", answer: "🐼"},
+            {question: "panda", answer: "🐼"},
             {question: "camel", answer: "🐪"},
             {question: "llama", answer: "🦙"},
             {question: "beaver", answer: "🦫"},
@@ -79,16 +92,13 @@ function newState() {
         solvedQuestions: [],
         questionIndex: null,
         gameOver: false,
-        speechSynthesisVoice: null,
-        buttonsPressed: null,
-        buttonsPressTimestamps: null,
         trollDistance: 1,
         trollDirection: 1,
         trollTimestamp: 0
     };
 }
 
-let State = newState();
+let GameState = newState();
 
 /**
  * Make a copy of the array and shuffle it.
@@ -103,10 +113,10 @@ function shuffle(array) {
 }
 
 function initializeQuestions() {
-    const shuffledVocab = shuffle(State.vocabulary);
+    const shuffledVocab = shuffle(GameState.vocabulary);
 
-    if (State.vocabulary.length <= 1) {
-        throw new Error("Expected at least two vocabulary cards to shuffle, but got: " + State.vocabulary.length);
+    if (GameState.vocabulary.length <= 1) {
+        throw new Error("Expected at least two vocabulary cards to shuffle, but got: " + GameState.vocabulary.length);
     }
 
     const remainingQuestions = [];
@@ -150,12 +160,12 @@ function initializeQuestions() {
         )
     }
 
-    State.remainingQuestions = remainingQuestions;
-    State.questionIndex = 0;
+    GameState.remainingQuestions = remainingQuestions;
+    GameState.questionIndex = 0;
 }
 
-function initializeSpeechSynthesis() {
-    State.speechSynthesisVoice = null;
+function setupSpeechSynthesis() {
+    SystemState.speechSynthesisVoice = null;
 
     if (window.speechSynthesis === undefined) {
         return;
@@ -163,7 +173,6 @@ function initializeSpeechSynthesis() {
 
     const voices = window.speechSynthesis.getVoices();
     if (voices === null || voices === undefined || voices.length === 0) {
-        console.log("Speech synthesis voices", voices.length);
         return;
     }
 
@@ -172,8 +181,8 @@ function initializeSpeechSynthesis() {
         if (lang === "en" || lang.startsWith("en-")) {
             const voice = voices[i];
 
-            if (State.speechSynthesisVoice !== voice) {
-                State.speechSynthesisVoice = voice;
+            if (SystemState.speechSynthesisVoice !== voice) {
+                SystemState.speechSynthesisVoice = voice;
             }
         }
     }
@@ -183,9 +192,8 @@ function initializeSpeechSynthesis() {
  * Initialize the state.
  */
 function initialize() {
-    State = newState();
+    GameState = newState();
     initializeQuestions();
-    initializeSpeechSynthesis();
 
     askTheQuestion();
 }
@@ -215,26 +223,26 @@ function updateDisplayIfNeeded(element, display) {
 function refreshQuestion() {
     const answerContainer = document.getElementById("answer-container");
 
-    if (State.remainingQuestions.length > 0) {
-        if (State.questionIndex === null) {
+    if (GameState.remainingQuestions.length > 0) {
+        if (GameState.questionIndex === null) {
             throw new Error(
-                "Expected question index to be set when there are " + State.remainingQuestions.length +
+                "Expected question index to be set when there are " + GameState.remainingQuestions.length +
                 " remaining questions still available."
             )
         }
-        if (State.questionIndex >= State.remainingQuestions.length) {
+        if (GameState.questionIndex >= GameState.remainingQuestions.length) {
             throw new Error(
-                "Unexpected question index " + State.questionIndex +
-                " when there are " + State.remainingQuestions.length + " remaining question(s)."
+                "Unexpected question index " + GameState.questionIndex +
+                " when there are " + GameState.remainingQuestions.length + " remaining question(s)."
             )
         }
 
-        const question = State.remainingQuestions[State.questionIndex];
+        const question = GameState.remainingQuestions[GameState.questionIndex];
 
         if (question === undefined) {
             throw new Error(
-                "Unexpected undefined question for question index " + State.questionIndex + " and when there are " +
-                State.remainingQuestions.length + " remaining question(s)."
+                "Unexpected undefined question for question index " + GameState.questionIndex + " and when there are " +
+                GameState.remainingQuestions.length + " remaining question(s)."
             )
         }
 
@@ -263,7 +271,7 @@ function refreshScore() {
      * @type {Array<string>}
      */
     const diamonds = [];
-    for (let i = 0; i < State.solvedQuestions.length; i++) {
+    for (let i = 0; i < GameState.solvedQuestions.length; i++) {
         diamonds.push("💎");
     }
 
@@ -278,7 +286,7 @@ function refreshBravo() {
     const bravoContainer = document.getElementById("bravo-container");
     const answerContainer = document.getElementById("answer-container");
 
-    if (State.remainingQuestions.length === 0) {
+    if (GameState.remainingQuestions.length === 0) {
         updateDisplayIfNeeded(bravoContainer, "");
         updateDisplayIfNeeded(answerContainer, "none");
     } else {
@@ -295,15 +303,15 @@ function refreshGamepads() {
     const gamepadSelect = document.getElementById("gamepad-select");
     gamepadSelect.innerHTML = "";
 
-    for (let i = 0; i < State.gamepads.length; i++) {
-        const gamepad = State.gamepads[i];
+    for (let i = 0; i < SystemState.gamepads.length; i++) {
+        const gamepad = SystemState.gamepads[i];
 
         /**
          * @type {HTMLOptionElement}
          */
         let option = document.createElement("option");
 
-        if (gamepad.index === State.activeGamepadIndex) {
+        if (gamepad.index === SystemState.activeGamepadIndex) {
             option.selected = true;
         }
         option.text = gamepad.id;
@@ -313,9 +321,9 @@ function refreshGamepads() {
     }
 }
 
-function refreshtroll() {
+function refreshTroll() {
     const parts = [];
-    for (let i = 0; i < State.trollDistance; i++) {
+    for (let i = 0; i < GameState.trollDistance; i++) {
         parts.push("&nbsp;");
     }
     document.getElementById("troll-distance").innerHTML = parts.join("");
@@ -326,7 +334,7 @@ function refresh() {
     refreshQuestion();
     refreshBravo();
     refreshScore();
-    refreshtroll();
+    refreshTroll();
 }
 
 function changeActiveGamepad() {
@@ -334,7 +342,7 @@ function changeActiveGamepad() {
      * @type {HTMLSelectElement}
      */
     const gamepadSelect = document.getElementById("gamepad-select");
-    State.activeGamepadIndex = parseInt(gamepadSelect.value);
+    SystemState.activeGamepadIndex = parseInt(gamepadSelect.value);
 }
 
 function updateGamepads() {
@@ -345,28 +353,28 @@ function updateGamepads() {
 
     gamepads.sort((a, b) => a.index - b.index);
 
-    State.gamepads = gamepads;
+    SystemState.gamepads = gamepads;
 
-    if (State.gamepads.length === 0) {
-        State.activeGamepadIndex = null;
+    if (SystemState.gamepads.length === 0) {
+        SystemState.activeGamepadIndex = null;
     } else {
         let foundActiveAgain = false;
 
         for (let i = 0; i < gamepads.length; i++) {
-            if (gamepads[i].index === State.activeGamepadIndex) {
+            if (gamepads[i].index === SystemState.activeGamepadIndex) {
                 foundActiveAgain = true;
                 break;
             }
         }
 
         if (!foundActiveAgain) {
-            State.activeGamepadIndex = State.gamepads[0].index;
+            SystemState.activeGamepadIndex = SystemState.gamepads[0].index;
         }
     }
 }
 
 function reactOnButtonPress(buttonIndex) {
-    if (!State.gameOver) {
+    if (!GameState.gameOver) {
         if (buttonIndex === 0) {
             answer(0);
         } else if (buttonIndex === 3) {
@@ -374,10 +382,10 @@ function reactOnButtonPress(buttonIndex) {
         } else {
             // Pass.
         }
-    } else {
-        if (buttonIndex === 9) {
-            initialize()
-        }
+    }
+
+    if (buttonIndex === 9) {
+        initialize()
     }
 }
 
@@ -385,18 +393,18 @@ function reactOnButtonPress(buttonIndex) {
  * @param {number} timestamp
  */
 function reactOnActiveGamepad(timestamp) {
-    if (State.gamepads.length === 0) {
+    if (SystemState.gamepads.length === 0) {
         return;
     }
 
-    if (State.activeGamepadIndex === null) {
+    if (SystemState.activeGamepadIndex === null) {
         throw new Error("Unexpected null for active gamepad index when gamepads are not empty")
     }
 
     /**
      * @type Gamepad
      */
-    const gamepad = State.gamepads[State.activeGamepadIndex];
+    const gamepad = SystemState.gamepads[SystemState.activeGamepadIndex];
 
     const newButtonsPressed = gamepad.buttons.map(button => button.pressed);
 
@@ -407,54 +415,54 @@ function reactOnActiveGamepad(timestamp) {
      */
     const buttonPresses = [];
 
-    if (State.buttonsPressed === null || State.buttonsPressed.length !== newButtonsPressed.length) {
-        State.buttonsPressTimestamps = newButtonsPressed.map(() => 0);
+    if (SystemState.buttonsPressed === null || SystemState.buttonsPressed.length !== newButtonsPressed.length) {
+        SystemState.buttonsPressTimestamps = newButtonsPressed.map(() => 0);
 
         for (let i = 0; i < newButtonsPressed.length; i++) {
             if (newButtonsPressed[i]) {
-                State.buttonsPressTimestamps[i] = timestamp;
+                SystemState.buttonsPressTimestamps[i] = timestamp;
                 buttonPresses.push(i);
             }
         }
 
-        State.buttonsPressed = newButtonsPressed;
+        SystemState.buttonsPressed = newButtonsPressed;
     } else {
-        if (State.buttonsPressTimestamps === null) {
+        if (SystemState.buttonsPressTimestamps === null) {
             throw new Error("Buttons press-timestamps must be set when buttons pressed is set.")
         }
 
-        if (State.buttonsPressTimestamps.length !== State.buttonsPressed.length) {
+        if (SystemState.buttonsPressTimestamps.length !== SystemState.buttonsPressed.length) {
             throw new Error(
                 "Expected length of button press-timestamps to match " +
-                State.buttonsPressed.left +
+                SystemState.buttonsPressed.left +
                 ", i.e., buttons pressed, but got: " +
-                State.buttonsPressTimestamps.length
+                SystemState.buttonsPressTimestamps.length
             )
         }
 
 
         for (let i = 0; i < newButtonsPressed.length; i++) {
-            if (newButtonsPressed[i] && !State.buttonsPressed[i]) {
-                const oldTimestamp = State.buttonsPressTimestamps[i]
+            if (newButtonsPressed[i] && !SystemState.buttonsPressed[i]) {
+                const oldTimestamp = SystemState.buttonsPressTimestamps[i]
                 const delta = timestamp - oldTimestamp;
 
                 // NOTE (mristin):
                 // Debounce after a second
                 if (delta > 1000) {
-                    State.buttonsPressTimestamps[i] = timestamp;
+                    SystemState.buttonsPressTimestamps[i] = timestamp;
                     buttonPresses.push(i);
                 }
             }
         }
 
-        State.buttonsPressed = newButtonsPressed;
+        SystemState.buttonsPressed = newButtonsPressed;
     }
 
-    if (State.buttonsPressed === null) {
+    if (SystemState.buttonsPressed === null) {
         throw new Error("Unexpected unset buttons pressed at the end of react-on-active-gamepad.")
     }
 
-    if (State.buttonsPressTimestamps === null) {
+    if (SystemState.buttonsPressTimestamps === null) {
         throw new Error("Unexpected unset buttons press-timestamps at the end of react-on-active-gamepad.")
     }
 
@@ -489,44 +497,44 @@ function answer(direction) {
     if (direction !== 0 && direction !== 1) {
         throw new Error("Expected only 0 and 1 direction, but got: " + direction);
     }
-    if (State.remainingQuestions.length === 0) {
+    if (GameState.remainingQuestions.length === 0) {
         throw new Error("Unexpected call to the answer function when there are no remaining questions.")
     }
-    if (State.questionIndex === null) {
+    if (GameState.questionIndex === null) {
         throw new Error("Expected question index to be set when remaining questions still available.")
     }
-    if (State.questionIndex >= State.remainingQuestions.length) {
+    if (GameState.questionIndex >= GameState.remainingQuestions.length) {
         throw new Error(
-            "Unexpected question index " + State.questionIndex +
-            " when there are " + State.remainingQuestions.length + " remaining question(s)."
+            "Unexpected question index " + GameState.questionIndex +
+            " when there are " + GameState.remainingQuestions.length + " remaining question(s)."
         )
     }
 
-    const question = State.remainingQuestions[State.questionIndex];
+    const question = GameState.remainingQuestions[GameState.questionIndex];
     if (question.correctAnswerIndex === direction) {
         playSuccess();
 
-        const solvedQuestionAsArray = State.remainingQuestions.splice(State.questionIndex, 1);
+        const solvedQuestionAsArray = GameState.remainingQuestions.splice(GameState.questionIndex, 1);
         if (solvedQuestionAsArray.length !== 1) {
             throw new Error(
                 "Expected exactly one question to be removed from remaining questions, " +
                 "but we removed " + solvedQuestionAsArray.length)
         }
 
-        State.solvedQuestions.push(solvedQuestionAsArray[0]);
+        GameState.solvedQuestions.push(solvedQuestionAsArray[0]);
 
-        State.trollDistance = Math.max(trollMaxDistance, State.trollDistance + 1);
+        GameState.trollDistance = Math.max(trollMaxDistance, GameState.trollDistance + 1);
 
-        if (State.remainingQuestions.length === 0) {
-            State.gameOver = true;
-            State.questionIndex = null;
+        if (GameState.remainingQuestions.length === 0) {
+            GameState.gameOver = true;
+            GameState.questionIndex = null;
         } else {
-            State.questionIndex = State.questionIndex % State.remainingQuestions.length;
+            GameState.questionIndex = GameState.questionIndex % GameState.remainingQuestions.length;
             askTheQuestion();
         }
     } else {
         playMistake();
-        State.questionIndex = (State.questionIndex + 1) % State.remainingQuestions.length;
+        GameState.questionIndex = (GameState.questionIndex + 1) % GameState.remainingQuestions.length;
         askTheQuestion();
     }
 
@@ -534,75 +542,63 @@ function answer(direction) {
 }
 
 function askTheQuestion() {
-    if (State.remainingQuestions.length === 0) {
+    if (GameState.remainingQuestions.length === 0) {
         throw new Error("Unexpected asking the question when there are no remaining questions.")
     }
-    if (State.questionIndex === null) {
+    if (GameState.questionIndex === null) {
         throw new Error("Expected question index to be set when remaining questions still available.")
     }
-    if (State.questionIndex >= State.remainingQuestions.length) {
+    if (GameState.questionIndex >= GameState.remainingQuestions.length) {
         throw new Error(
-            "Unexpected question index " + State.questionIndex +
-            " when there are " + State.remainingQuestions.length + " remaining question(s)."
+            "Unexpected question index " + GameState.questionIndex +
+            " when there are " + GameState.remainingQuestions.length + " remaining question(s)."
         )
     }
 
-    const question = State.remainingQuestions[State.questionIndex];
+    const question = GameState.remainingQuestions[GameState.questionIndex];
     const text = question.question;
 
     console.log("Asking the question: " + text);
 
-    if (State.speechSynthesisVoice === null) {
+    if (SystemState.speechSynthesisVoice === null) {
         return;
     }
 
     let utterance = new SpeechSynthesisUtterance();
     utterance.text = text;
-    utterance.voice = State.speechSynthesisVoice;
+    utterance.voice = SystemState.speechSynthesisVoice;
 
     // Delay a bit so that we do not conflict with the feedback sounds
     setTimeout(() => window.speechSynthesis.speak(utterance), 500);
 }
 
-function sayHi() {
-    if (State.speechSynthesisVoice === null) {
-        return;
-    }
-    let utterance = new SpeechSynthesisUtterance();
-
-    // Set the text and voice of the utterance
-    utterance.text = "Hi!";
-    utterance.voice = State.speechSynthesisVoice;
-    setTimeout(() => window.speechSynthesis.speak(utterance), 500);
-}
-
-function updatetroll(timestamp) {
-    const temporalDelta = timestamp - State.trollTimestamp;
-    if (State.solvedQuestions.length > 0 && temporalDelta > 1000) {
+function updateTroll(timestamp) {
+    const temporalDelta = timestamp - GameState.trollTimestamp;
+    if (GameState.solvedQuestions.length > 0 && temporalDelta > 1000) {
         const spatialDelta = Math.round(temporalDelta / 1000);
-        State.trollDistance = Math.min(
-            Math.max(0, State.trollDistance + State.trollDirection * spatialDelta),
+        GameState.trollDistance = Math.min(
+            Math.max(0, GameState.trollDistance + GameState.trollDirection * spatialDelta),
             trollMaxDistance
         );
 
-        if (State.trollDistance === 0 || State.trollDistance === trollMaxDistance) {
-            State.trollDirection = -1 * State.trollDirection;
+        if (GameState.trollDistance === 0 || GameState.trollDistance === trollMaxDistance) {
+            GameState.trollDirection = -1 * GameState.trollDirection;
         }
 
-        if (State.trollDistance === 0) {
+        if (GameState.trollDistance === 0) {
             playStolen();
-            const stolenQuestion = State.solvedQuestions.pop();
+            const stolenQuestion = GameState.solvedQuestions.pop();
             if (stolenQuestion === undefined) {
                 throw new Error(
-                    "Stolen question was undefined. The question index is " + State.questionIndex + ", " +
-                    "while there are " + State.solvedQuestions.length + " solved question(s) " +
-                    "and " + State.remainingQuestions + " remaining question(s)."
+                    "Stolen question was undefined. The question index is " + GameState.questionIndex + ", " +
+                    "while there are " + GameState.solvedQuestions.length + " solved question(s) " +
+                    "and " + GameState.remainingQuestions + " remaining question(s)."
                 )
             }
-            State.remainingQuestions.push(stolenQuestion);
+            GameState.remainingQuestions.push(stolenQuestion);
         }
 
-        State.trollTimestamp = timestamp;
+        GameState.trollTimestamp = timestamp;
     }
 }
 
@@ -613,8 +609,8 @@ function handleFrame(timestamp) {
     updateGamepads();
     reactOnActiveGamepad(timestamp);
 
-    if (!State.gameOver) {
-        updatetroll(timestamp);
+    if (!GameState.gameOver) {
+        updateTroll(timestamp);
     }
 
     refresh();
@@ -622,22 +618,18 @@ function handleFrame(timestamp) {
     requestAnimationFrame(handleFrame);
 }
 
-/**
- * @type {SpeechSynthesisVoice|null}
- */
-let speechSynthesisVoice = null;
-
 function main() {
     updateDisplayIfNeeded(
         document.getElementById("container"),
         ""
     );
 
+    setupSpeechSynthesis();
     initialize();
     document.getElementById("left-answer").onclick = () => answer(0);
     document.getElementById("right-answer").onclick = () => answer(1);
     document.getElementById("restart").onclick = initialize;
-    if (State.speechSynthesisVoice === null) {
+    if (SystemState.speechSynthesisVoice === null) {
         alert("Currently, your browser does not support speech synthesis.")
     }
 
