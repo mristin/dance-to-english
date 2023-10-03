@@ -107,8 +107,7 @@ function newState() {
             {question: "chick", answer: "🐤"},
             {question: "jellyfish", answer: "🪼"},
             {question: "shell", answer: "🐚"},
-            {question: "worm", answer: "🪱"},
-            
+            {question: "worm", answer: "🪱"}
         ],
         remainingQuestions: [],
         solvedQuestions: [],
