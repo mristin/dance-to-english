@@ -24,12 +24,6 @@
     font-size: 0.5em;
 }
 
-#gamepad-container {
-    border-top: 1px solid black;
-    padding-top: 0.5em;
-    margin-top: 3em;
-}
-
 
 #bravo-container {
     padding: 0.5em;
@@ -55,4 +49,27 @@
 }
 #hello {
     font-size: 5em;
+}
+
+.announcement {
+    font-size: 4em;
+}
+
+#gamepad-container {
+    border-top: 1px solid black;
+    padding-top: 0.5em;
+    margin-top: 3em;
+}
+
+.level-selected {
+    background-color: bisque;
+}
+.level-choice {
+    font-size: 3em;
+}
+.level-choice:hover {
+    background-color: aliceblue;
+}
+.level-choice:active {
+    background-color: bisque;
 }
