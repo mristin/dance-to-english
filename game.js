@@ -466,7 +466,12 @@ Select the level:
      * @param {number } delta
      */
     changeSelection(delta) {
-        this.levelIndex = (this.levelIndex + delta) % levels.length;
+        if (this.levelIndex + delta < 0) {
+            this.levelIndex = levels.length + (this.levelIndex + delta);
+        } else {
+            this.levelIndex = (this.levelIndex + delta) % levels.length;
+        }
+
         this.announceLevel();
     }
 
