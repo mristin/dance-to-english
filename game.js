@@ -151,6 +151,100 @@ const levels = [
             {question: "shell", answer: "🐚"},
             {question: "worm", answer: "🪱"}
         ]
+    },
+    {
+        name: "City",
+        vocabulary: [
+            {question: "building", answer: "🏢"},
+            {question: "house", answer: "🏠"},
+            {
+                question: "park",
+                answer: "🌳<img src='additional-emojis/bench.png'>🛝🌳"
+            },
+            {
+                question: "bench",
+                answer: "<img src='additional-emojis/bench.png'>"
+            },
+            {
+                question: "playground",
+                answer: (
+                    "🛝" +
+                    "<img src='additional-emojis/swing.png'>" +
+                    "<img src='additional-emojis/sandbox.png'"
+                )
+            },
+            {question: "slide", answer: "🛝"},
+            {
+                question: "swing",
+                answer: "<img src='additional-emojis/swing.png'>"
+            },
+            {
+                question: "sandbox",
+                answer: "<img src='additional-emojis/sandbox.png'>"
+            },
+            {question: "car", answer: "🚗"},
+            {question: "bus", answer: "🚌"},
+            {question: "train", answer: "🚆"},
+            {question: "train station", answer: "🚉"},
+            {
+                question: "bench",
+                answer: "<img src='additional-emojis/bench.png'>"
+            },
+            {
+                question: "road",
+                answer: "<img src='additional-emojis/road.png'>"
+            },
+            {
+                question: "street",
+                answer: "<img src='additional-emojis/street.png'>"
+            },
+            {
+                question: "sidewalk",
+                answer: "<img src='additional-emojis/sidewalk.png'>"
+            },
+            {question: "traffic light", answer: "🚦"},
+            {question: "airplane", answer: "🛬"},
+            {
+                question: "airport",
+                answer: "<img src='additional-emojis/airport.png'>"
+            },
+            {
+                question: "restaurant",
+                answer: "<img src='additional-emojis/restaurant.png'>"
+            },
+            {
+                question: "shop",
+                answer: "<img src='additional-emojis/shop.png'>"
+            },
+            {
+                question: "supermarket",
+                answer: "<img src='additional-emojis/supermarket.png'>"
+            },
+            {question: "hospital", answer: "🏥"},
+            {question: "ambulance", answer: "🚑"},
+            {question: "fire truck", answer: "🚒"},
+            {question: "policeman", answer: "👮"},
+            {question: "police car", answer: "🚓"},
+            {
+                question: "police station",
+                answer: "<img src='additional-emojis/police-station.png'>"
+            },
+            {
+                question: "harbor",
+                answer: "<img src='additional-emojis/harbor.png'>"
+            },
+            {question: "ship", answer: "🚢"},
+            {question: "boat", answer: "🛥️"},
+            {question: "tram car", answer: "🚋"},
+            {
+                question: "theater",
+                answer: "<img src='additional-emojis/theater.png'>"
+            },
+            {
+                question: "cinema",
+                answer: "<img src='additional-emojis/cinema.png'>"
+            },
+        ]
     }
 ];
 
@@ -695,7 +789,10 @@ class DialoguePlay {
         const question = this.remainingQuestions[this.questionIndex];
         const text = question.question;
 
-        console.log(`Asking the question: ${text}`);
+        console.log(
+            `Asking the question at index ${this.questionIndex} out of ` +
+            `${this.remainingQuestions.length} remaining questions: ${text}`
+        );
 
         if (systemState.speechSynthesisVoice === null) {
             return;
@@ -762,19 +859,49 @@ class DialoguePlay {
                 this.thiefDistance + 1
             );
 
+            console.log(
+                `The answer was correct. Now you have ` +
+                `${this.solvedQuestions} solved question(s) ` +
+                `and ${this.remainingQuestions.length} remaining questions. `
+            )
+
             if (this.remainingQuestions.length === 0) {
+                console.log(
+                    "Since there are no remaining questions, we move to " +
+                    "the bravo dialogue."
+                )
                 dialoguer.put(new DialogueBravo())
             } else {
+                console.log(
+                    `The question at index {this.questionIndex} has been ` +
+                    `answered correctly.`
+                )
                 this.questionIndex = (
                     this.questionIndex % this.remainingQuestions.length
                 );
+                console.log(
+                    `We are now going to ask the question ` +
+                    `at index ${this.questionIndex} in the array of ` +
+                    `${this.remainingQuestions.length} remaining question(s).`
+                )
                 this.askTheQuestion();
             }
         } else {
+            console.log(
+                `We made a mistake at answering the question ` +
+                `at index ${this.questionIndex} out of ` +
+                `${this.remainingQuestions.length} remaining question(s).`
+            )
             this.playMistake();
             this.questionIndex = (
                 (this.questionIndex + 1) % this.remainingQuestions.length
             );
+
+            console.log(
+                `We are now moving to ask the next question, ` +
+                `at index ${this.questionIndex}, out of ` +
+                `${this.remainingQuestions.length} remaining question(s).`
+            )
             this.askTheQuestion();
         }
     }
@@ -803,9 +930,11 @@ class DialoguePlay {
         const that = this;
 
         document.getElementById("left-answer").onclick = () => {
+            console.log("Received click on the left answer.")
             that.answer(0);
         };
         document.getElementById("right-answer").onclick = () => {
+            console.log("Received click on the right answer.")
             that.answer(1);
         }
 
@@ -856,11 +985,12 @@ class DialoguePlay {
             )
         }
 
-        updateInnerTextIfNeeded(
+        updateInnerHTMLIfNeeded(
             document.getElementById("left-answer"),
             question.answers[0].text
         );
-        updateInnerTextIfNeeded(
+
+        updateInnerHTMLIfNeeded(
             document.getElementById("right-answer"),
             question.answers[1].text
         );
@@ -1114,6 +1244,26 @@ function announce(text) {
             }
         }
     })
+}
+
+
+const dummyElementForHTMLCanonicalization = document.createElement(
+    "div"
+);
+
+/**
+ * Update the inner HTML of the element if it differs from the given text.
+ * @param {HTMLElement} element
+ * @param {string} code HTML code
+ */
+function updateInnerHTMLIfNeeded(element, code) {
+    dummyElementForHTMLCanonicalization.innerHTML = code;
+    const canonicalized = dummyElementForHTMLCanonicalization.innerHTML;
+
+    if (canonicalized !== element.innerHTML) {
+        console.log("rendered")
+        element.innerHTML = canonicalized;
+    }
 }
 
 /**

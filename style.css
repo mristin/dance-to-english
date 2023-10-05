@@ -24,6 +24,10 @@
     serif;
 }
 
+.answer > img {
+    height: 1em;
+}
+
 #right-answer {
     float: right;
 }
@@ -94,3 +98,4 @@
 .level-choice:active {
     background-color: bisque;
 }
+
