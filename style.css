@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'My Noto Color Emoji';
+    src: url(NotoColorEmoji.ttf);
+}
+
 #container {
     width: 80%;
     margin: 0 auto;
@@ -7,6 +12,16 @@
 
 .answer {
     font-size: 10em;
+    font-family: "My Noto Color Emoji",
+    apple color emoji,
+    segoe ui emoji,
+    noto color emoji,
+    android emoji,
+    emojisymbols,
+    emojione mozilla,
+    twemoji mozilla,
+    segoe ui symbol,
+    serif;
 }
 
 #right-answer {
@@ -30,9 +45,11 @@
     margin: 0.5em;
     text-align: center;
 }
+
 #bravo {
     font-size: 5em;
 }
+
 #restart {
     margin-top: 2em;
     font-size: 3em;
@@ -47,6 +64,7 @@
     margin: 0.5em;
     text-align: center;
 }
+
 #hello {
     font-size: 5em;
 }
@@ -64,12 +82,15 @@
 .level-selected {
     background-color: bisque;
 }
+
 .level-choice {
     font-size: 3em;
 }
+
 .level-choice:hover {
     background-color: aliceblue;
 }
+
 .level-choice:active {
     background-color: bisque;
 }
