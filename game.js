@@ -210,7 +210,7 @@ class DialoguePressHere {
 
     initialHTML() {
         return `<button class="announcement" id="press-start">
-Press here when you are ready to start.
+Click here when you are ready to start.
 </button>`;
     }
 
