@@ -359,12 +359,40 @@ internet connection and your browser needs one for speech synthesis?
     }
 }
 
-const buttonIndices = {
-    left: 0,
-    right: 3,
-    start: 9,
-    select: 8
+/**
+ * @typedef ButtonMapping
+ * @property {number} left
+ * @property {number} right
+ * @property {number} start
+ */
+
+
+/**
+ * @returns {ButtonMapping}
+ */
+function generateButtonMapping() {
+    if (navigator.platform === "MacIntel") {
+        return {
+            left: 2,
+            right: 3,
+            start: 9
+        }
+    } else if (navigator.platform === "Linux x86_64") {
+        return {
+            left: 0,
+            right: 3,
+            start: 9
+        }
+    } else {
+        return {
+            left: 2,
+            right: 3,
+            start: 9
+        }
+    }
 }
+
+const buttonIndices = generateButtonMapping();
 
 /**
  * Let the user select the level.
@@ -447,7 +475,7 @@ Select the level:
             this.changeSelection(-1);
         } else if (buttonIndex === buttonIndices.right) {
             this.changeSelection(+1);
-        } else if (buttonIndex === buttonIndices.select) {
+        } else if (buttonIndex === buttonIndices.start) {
             this.startTheGame();
         }
     }
