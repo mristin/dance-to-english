@@ -1194,6 +1194,9 @@ function reactOnActiveGamepad(timestamp) {
         throw new Error("Unexpected unset buttons press-timestamps at the end of react-on-active-gamepad.")
     }
 
+    if (buttonPresses.length > 0) {
+        console.log("The following buttons are pressed", buttonPresses)
+    }
     for (let i = 0; i < buttonPresses.length; i++) {
         reactOnButtonPress(buttonPresses[i]);
     }
