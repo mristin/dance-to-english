@@ -1093,7 +1093,13 @@ function announce(text) {
 
     return new Promise((resolve, reject) => {
         utterance.onend = resolve;
-        utterance.onerror = reject
+        utterance.onerror = (errorEvent) => {
+            if (errorEvent.error === 'interrupted') {
+                resolve();
+            } else {
+                reject(errorEvent)
+            }
+        }
     })
 }
 
