@@ -384,8 +384,8 @@ internet connection and your browser needs one for speech synthesis?
 function generateButtonMapping() {
     if (navigator.platform === "MacIntel") {
         return {
-            left: 2,
-            right: 3,
+            left: 3,
+            right: 2,
             start: 9
         }
     } else if (navigator.platform === "Linux x86_64") {
@@ -396,14 +396,16 @@ function generateButtonMapping() {
         }
     } else {
         return {
-            left: 2,
-            right: 3,
+            left: 3,
+            right: 2,
             start: 9
         }
     }
 }
 
 const buttonIndices = generateButtonMapping();
+
+console.log("The button mapping is:", buttonIndices)
 
 /**
  * Let the user select the level.
