@@ -1,3 +1,5 @@
+console.log("Navigator platform is", navigator.platform)
+
 const thiefMaxDistance = 5;
 
 /**
