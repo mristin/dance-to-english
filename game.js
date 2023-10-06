@@ -149,12 +149,20 @@ const levels = [
             {question: "chick", answer: "🐤"},
             {question: "jellyfish", answer: "🪼"},
             {question: "shell", answer: "🐚"},
-            {question: "worm", answer: "🪱"}
+            {question: "worm", answer: "🪱"},
+            {
+                question: "orca killer whale",
+                answer: "<img src='additional-emojis/orca.png'>"
+            }
         ]
     },
     {
         name: "City",
         vocabulary: [
+            {
+                question: "city",
+                answer: "<img src='additional-emojis/city.png'>"
+            },
             {question: "building", answer: "🏢"},
             {question: "house", answer: "🏠"},
             {
