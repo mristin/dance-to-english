@@ -253,7 +253,38 @@ const levels = [
                 answer: "<img src='additional-emojis/cinema.png'>"
             },
         ]
-    }
+    },
+    {
+        name: "Emotions",
+        vocabulary: [
+            {question: "happy", answer: "😀"},
+            {question: "tired", answer: "🥱"},
+            {question: "worried", answer: "😟"},
+            {question: "angry", answer: "😠"},
+            {question: "proud", answer: "😊"},
+            {question: "bored", answer: "🫤"},
+            {question: "excited", answer: "😃"},
+            {question: "upset", answer: "😭"},
+            {question: "embarrassed", answer: "🫣"},
+            {question: "sad", answer: "😢"},
+            {question: "insulted", answer: "😞"},
+            {question: "sick", answer: "🤒"},
+            {question: "hungry", answer: "😋"},
+            {question: "lonely", answer: "😞"},
+            {question: "surprised", answer: "😲"},
+            {question: "relaxed", answer: "😌"},
+            {question: "scared", answer: "😨"},
+            {question: "pensive", answer: "🤔"},
+            {question: "furious", answer: "😤"},
+            {question: "hurt", answer: "🤕"},
+            {question: "cold", answer: "🥶"},
+            {question: "hot", answer: "🥵"},
+            {question: "nervous", answer: "🤯"},
+            {question: "in love", answer: "😍"},
+            {question: "silly", answer: "🤪"},
+            {question: "disappointed", answer: "😒"},
+        ]
+    },
 ];
 
 if (levels.length === 0) {
