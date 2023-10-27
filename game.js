@@ -270,7 +270,14 @@ const levels = [
             {question: "insulted", answer: "😞"},
             {question: "sick", answer: "🤒"},
             {question: "hungry", answer: "😋"},
-            {question: "lonely", answer: "😞"},
+            {
+                question: "thirsty",
+                answer: "<img src='additional-emojis/thirsty.png'>"
+            },
+            {
+                question: "lonely",
+                answer: "<img src='additional-emojis/lonely.png'>"
+            },
             {question: "surprised", answer: "😲"},
             {question: "relaxed", answer: "😌"},
             {question: "scared", answer: "😨"},
@@ -283,6 +290,58 @@ const levels = [
             {question: "in love", answer: "😍"},
             {question: "silly", answer: "🤪"},
             {question: "disappointed", answer: "😒"},
+        ]
+    },
+    {
+        name: "Vehicles",
+        vocabulary: [
+            {question: "car", answer: "🚗"},
+            {question: "racing car", answer: "🏎️"},
+            {question: "bicycle", answer: "🚲"},
+            {question: "motor bike", answer: "🏍️"},
+            {question: "tram car", answer: "🚋"},
+            {question: "locomotive", answer: "🚂"},
+            {question: "train carriage", answer: "🚃"},
+            {
+                question: "carriage",
+                answer: "<img src='additional-emojis/carriage.png'>"
+            },
+            {question: "ship", answer: "🚢"},
+            {question: "boat", answer: "🛥️"},
+            {question: "rocket", answer: "🚀"},
+            {
+                question: "space ship",
+                answer: "<img src='additional-emojis/space-ship.png'>"
+            },
+            {
+                question: "airship",
+                answer: "<img src='additional-emojis/airship.png'>"
+            },
+            {question: "skateboard", answer: "🛹"},
+            {question: "roller skate", answer: "🛼"},
+            {question: "ice skate", answer: "⛸"},
+            {
+                question: "inline skate",
+                answer: "<img src='additional-emojis/inline-skate.png'>"
+            },
+            {question: "kick scooter", answer: "🛴"},
+            {question: "parachute", answer: "🪂"},
+            {question: "airplane", answer: "🛬"},
+            {question: "helicopter", answer: "🚁"},
+            {question: "truck", answer: "🚚"},
+            {
+                question: "submarine",
+                answer: "<img src='additional-emojis/submarine.png'>"
+            },
+            {question: "train", answer: "🚆"},
+            {question: "bus", answer: "🚌"},
+            {
+                question: "van",
+                answer: "<img src='additional-emojis/van.png'>"
+            },
+            {question: "ski", answer: "🎿"},
+            {question: "snowboard", answer: "🏂"},
+            {question: "sledge", answer: "🛷"},
         ]
     },
 ];
