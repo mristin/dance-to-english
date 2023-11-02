@@ -344,6 +344,36 @@ const levels = [
             {question: "sledge", answer: "🛷"},
         ]
     },
+    {
+        name: "Colors",
+        vocabulary: [
+            "black",
+            "brown",
+            "grey",
+            "white",
+            "yellow",
+            "orange",
+            "red",
+            "pink",
+            "purple",
+            "blue",
+            "green",
+            "dark blue",
+            "light blue",
+            "turquoise",
+            "light green",
+            "dark green",
+            "dark red",
+            "lime",
+            "olive",
+        ].map(text => {
+            const noSpace = text.replace(" ", "");
+            return {
+                question: text,
+                answer: `<span  style='color: ${noSpace}; background-color: white;'>⬤</span>`
+            }
+        })
+    },
 ];
 
 if (levels.length === 0) {
