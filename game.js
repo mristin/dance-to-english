@@ -374,6 +374,71 @@ const levels = [
             }
         })
     },
+    {
+        name: "Plants",
+        vocabulary: [
+            {question: "tree", answer: "🌳"},
+            {question: "fir-tree", answer: "🌲"},
+            {question: "palm tree", answer: "🌴"},
+            {question: "cactus", answer: "🌵"},
+            {
+                question: "grass",
+                answer: "<img src='additional-emojis/grass.png'>"
+            },
+            {
+                question: "bush",
+                answer: "<img src='additional-emojis/bush.png'>"
+            },
+            {question: "leaf", answer: "🍁"},
+            {
+                question: "branch",
+                answer: "<img src='additional-emojis/branch.png'>"
+            },
+            {
+                question: "stump",
+                answer: "<img src='additional-emojis/stump.png'>"
+            },
+            {
+                question: "trunk",
+                answer: "<img src='additional-emojis/trunk.png'>"
+            },
+            {
+                question: "flower",
+                answer: "<img src='additional-emojis/flower.png'>"
+            },
+            {question: "mushroom", answer: "🍄"},
+            {
+                question: "root",
+                answer: "<img src='additional-emojis/root.png'>"
+            },
+            {
+                question: "fruit",
+                answer: "<img src='additional-emojis/fruit-on-tree.png'>"
+            },
+            {question: "seedling", answer: "🌱"},
+            {
+                question: "seed",
+                answer: "<img src='additional-emojis/seed.png'>"
+            },
+            {
+                question: "sprout",
+                answer: "<img src='additional-emojis/sprout.png'>"
+            },
+            {
+                question: "soil",
+                answer: "<img src='additional-emojis/soil.png'>"
+            },
+            {
+                question: "fertile",
+                answer: "<img src='additional-emojis/fertile-soil.png'>"
+            },
+            {
+                question: "rain",
+                answer: "<img src='additional-emojis/rain.png'>"
+            },
+            {question: "sun", answer: "☀"}
+        ]
+    },
 ];
 
 if (levels.length === 0) {
