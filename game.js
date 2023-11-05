@@ -153,7 +153,8 @@ const levels = [
             {
                 question: "orca killer whale",
                 answer: "<img src='additional-emojis/orca.png'>"
-            }
+            },
+            {question: "egg", answer: "🥚"}
         ]
     },
     {
@@ -436,7 +437,11 @@ const levels = [
                 question: "rain",
                 answer: "<img src='additional-emojis/rain.png'>"
             },
-            {question: "sun", answer: "☀"}
+            {question: "sun", answer: "☀"},
+            {
+                question: "pinecone",
+                answer: "<img src='additional-emojis/pinecone.png'>"
+            },
         ]
     },
 ];
