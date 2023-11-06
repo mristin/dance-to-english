@@ -442,6 +442,14 @@ const levels = [
                 question: "pinecone",
                 answer: "<img src='additional-emojis/pinecone.png'>"
             },
+            {
+                question: "forest",
+                answer: "<img src='additional-emojis/forest.png'>"
+            },
+            {
+                question: "meadow",
+                answer: "<img src='additional-emojis/meadow.png'>"
+            },
         ]
     },
 ];
