@@ -453,7 +453,7 @@ const levels = [
         ]
     },
     {
-        name: "Actions",
+        name: "Actions 1",
         vocabulary: [
             {
                 question: "to go",
@@ -528,6 +528,31 @@ const levels = [
                 answer: "<img src='additional-emojis/to-watch.png'>"
             },
             {
+                question: "to build",
+                answer: "<img src='additional-emojis/to-build.png'>"
+            },
+            {
+                question: "to think",
+                answer: "<img src='additional-emojis/to-think.png'>"
+            },
+            {
+                question: "to dream",
+                answer: "<img src='additional-emojis/to-dream.png'>"
+            },
+            {
+                question: "to work",
+                answer: "<img src='additional-emojis/to-work.png'>"
+            },
+            {
+                question: "to yell",
+                answer: "<img src='additional-emojis/to-yell.png'>"
+            },
+        ]
+    },
+    {
+        name: "Actions 2",
+        vocabulary: [
+            {
                 question: "to ride",
                 answer: "<img src='additional-emojis/to-ride.png'>"
             },
@@ -584,10 +609,6 @@ const levels = [
                 answer: "<img src='additional-emojis/to-hit.png'>"
             },
             {
-                question: "to shoot",
-                answer: "<img src='additional-emojis/to-shoot.png'>"
-            },
-            {
                 question: "to throw",
                 answer: "<img src='additional-emojis/to-throw.png'>"
             },
@@ -608,29 +629,22 @@ const levels = [
                 answer: "<img src='additional-emojis/to-buy.png'>"
             },
             {
-                question: "to bake",
-                answer: "<img src='additional-emojis/to-bake.jpeg'>"
+                question: "to brush",
+                answer: "<img src='additional-emojis/to-brush.png'>"
             },
             {
-                question: "to build",
-                answer: "<img src='additional-emojis/to-build.png'>"
+                question: "to remember",
+                answer: "<img src='additional-emojis/to-remember.png'>"
             },
             {
-                question: "to think",
-                answer: "<img src='additional-emojis/to-think.png'>"
+                question: "to lead",
+                answer: "<img src='additional-emojis/to-lead.png'>"
             },
-            {
-                question: "to dream",
-                answer: "<img src='additional-emojis/to-dream.png'>"
-            },
-            {
-                question: "to work",
-                answer: "<img src='additional-emojis/to-work.png'>"
-            },
-            {
-                question: "to yell",
-                answer: "<img src='additional-emojis/to-yell.png'>"
-            },
+        ]
+    },
+    {
+        name: "Actions 3",
+        vocabulary: [
             {
                 question: "to help",
                 answer: "<img src='additional-emojis/to-help.png'>"
@@ -723,20 +737,8 @@ const levels = [
                 question: "to drive",
                 answer: "<img src='additional-emojis/to-drive.png'>"
             },
-            {
-                question: "to brush",
-                answer: "<img src='additional-emojis/to-brush.png'>"
-            },
-            {
-                question: "to remember",
-                answer: "<img src='additional-emojis/to-remember.png'>"
-            },
-            {
-                question: "to lead",
-                answer: "<img src='additional-emojis/to-lead.png'>"
-            },
         ]
-    },
+    }
 ];
 
 if (levels.length === 0) {
