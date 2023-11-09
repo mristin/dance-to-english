@@ -452,6 +452,291 @@ const levels = [
             },
         ]
     },
+    {
+        name: "Actions",
+        vocabulary: [
+            {
+                question: "to go",
+                answer: "<img src='additional-emojis/to-go.png'>"
+            },
+            {
+                question: "to eat",
+                answer: "<img src='additional-emojis/to-eat.png'>"
+            },
+            {
+                question: "to drink",
+                answer: "<img src='additional-emojis/to-drink.png'>"
+            },
+            {
+                question: "to sleep",
+                answer: "<img src='additional-emojis/to-sleep.png'>"
+            },
+            {
+                question: "to run",
+                answer: "<img src='additional-emojis/to-run.png'>"
+            },
+            {
+                question: "to bring",
+                answer: "<img src='additional-emojis/to-bring.png'>"
+            },
+            {
+                question: "to cook",
+                answer: "<img src='additional-emojis/to-cook.png'>"
+            },
+            {
+                question: "to clean",
+                answer: "<img src='additional-emojis/to-clean.png'>"
+            },
+            {
+                question: "to wash",
+                answer: "<img src='additional-emojis/to-wash.png'>"
+            },
+            {
+                question: "to climb",
+                answer: "<img src='additional-emojis/to-climb.png'>"
+            },
+            {
+                question: "to draw",
+                answer: "<img src='additional-emojis/to-draw.png'>"
+            },
+            {
+                question: "to write",
+                answer: "<img src='additional-emojis/to-write.png'>"
+            },
+            {
+                question: "to read",
+                answer: "<img src='additional-emojis/to-read.png'>"
+            },
+            {
+                question: "to play",
+                answer: "<img src='additional-emojis/to-play.png'>"
+            },
+            {
+                question: "to listen",
+                answer: "<img src='additional-emojis/to-listen.png'>"
+            },
+            {
+                question: "to hide",
+                answer: "<img src='additional-emojis/to-hide.png'>"
+            },
+            {
+                question: "to see",
+                answer: "<img src='additional-emojis/to-see.png'>"
+            },
+            {
+                question: "to watch",
+                answer: "<img src='additional-emojis/to-watch.png'>"
+            },
+            {
+                question: "to ride",
+                answer: "<img src='additional-emojis/to-ride.png'>"
+            },
+            {
+                question: "to ask",
+                answer: "<img src='additional-emojis/to-ask.png'>"
+            },
+            {
+                question: "to answer",
+                answer: "<img src='additional-emojis/to-answer.png'>"
+            },
+            {
+                question: "to say",
+                answer: "<img src='additional-emojis/to-say.png'>"
+            },
+            {
+                question: "to tell",
+                answer: "<img src='additional-emojis/to-tell.png'>"
+            },
+            {
+                question: "to search",
+                answer: "<img src='additional-emojis/to-search.png'>"
+            },
+            {
+                question: "to count",
+                answer: "<img src='additional-emojis/to-count.png'>"
+            },
+            {
+                question: "to open",
+                answer: "<img src='additional-emojis/to-open.png'>"
+            },
+            {
+                question: "to close",
+                answer: "<img src='additional-emojis/to-close.png'>"
+            },
+            {
+                question: "to sit",
+                answer: "<img src='additional-emojis/to-sit.png'>"
+            },
+            {
+                question: "to stand",
+                answer: "<img src='additional-emojis/to-stand.png'>"
+            },
+            {
+                question: "to lie",
+                answer: "<img src='additional-emojis/to-lie.png'>"
+            },
+            {
+                question: "to squat",
+                answer: "<img src='additional-emojis/to-squat.png'>"
+            },
+            {
+                question: "to hit",
+                answer: "<img src='additional-emojis/to-hit.png'>"
+            },
+            {
+                question: "to shoot",
+                answer: "<img src='additional-emojis/to-shoot.png'>"
+            },
+            {
+                question: "to throw",
+                answer: "<img src='additional-emojis/to-throw.png'>"
+            },
+            {
+                question: "to steal",
+                answer: "<img src='additional-emojis/to-steal.png'>"
+            },
+            {
+                question: "to hold",
+                answer: "<img src='additional-emojis/to-hold.png'>"
+            },
+            {
+                question: "to pay",
+                answer: "<img src='additional-emojis/to-pay.png'>"
+            },
+            {
+                question: "to buy",
+                answer: "<img src='additional-emojis/to-buy.png'>"
+            },
+            {
+                question: "to bake",
+                answer: "<img src='additional-emojis/to-bake.jpeg'>"
+            },
+            {
+                question: "to build",
+                answer: "<img src='additional-emojis/to-build.png'>"
+            },
+            {
+                question: "to think",
+                answer: "<img src='additional-emojis/to-think.png'>"
+            },
+            {
+                question: "to dream",
+                answer: "<img src='additional-emojis/to-dream.png'>"
+            },
+            {
+                question: "to work",
+                answer: "<img src='additional-emojis/to-work.png'>"
+            },
+            {
+                question: "to yell",
+                answer: "<img src='additional-emojis/to-yell.png'>"
+            },
+            {
+                question: "to help",
+                answer: "<img src='additional-emojis/to-help.png'>"
+            },
+            {
+                question: "to push",
+                answer: "<img src='additional-emojis/to-push.png'>"
+            },
+            {
+                question: "to pull",
+                answer: "<img src='additional-emojis/to-pull.png'>"
+            },
+            {
+                question: "to teach",
+                answer: "<img src='additional-emojis/to-teach.png'>"
+            },
+            {
+                question: "to learn",
+                answer: "<img src='additional-emojis/to-learn.png'>"
+            },
+            {
+                question: "to study",
+                answer: "<img src='additional-emojis/to-study.png'>"
+            },
+            {
+                question: "to live",
+                answer: "<img src='additional-emojis/to-live.png'>"
+            },
+            {
+                question: "to fly",
+                answer: "<img src='additional-emojis/to-fly.jpeg'>"
+            },
+            {
+                question: "to swim",
+                answer: "<img src='additional-emojis/to-swim.png'>"
+            },
+            {
+                question: "to fight",
+                answer: "<img src='additional-emojis/to-fight.png'>"
+            },
+            {
+                question: "to follow",
+                answer: "<img src='additional-emojis/to-follow.png'>"
+            },
+            {
+                question: "to give",
+                answer: "<img src='additional-emojis/to-give.png'>"
+            },
+            {
+                question: "to stop",
+                answer: "<img src='additional-emojis/to-stop.png'>"
+            },
+            {
+                question: "to walk",
+                answer: "<img src='additional-emojis/to-walk.png'>"
+            },
+            {
+                question: "to win",
+                answer: "<img src='additional-emojis/to-win.png'>"
+            },
+            {
+                question: "to love",
+                answer: "<img src='additional-emojis/to-love.png'>"
+            },
+            {
+                question: "to wait",
+                answer: "<img src='additional-emojis/to-wait.png'>"
+            },
+            {
+                question: "to scream",
+                answer: "<img src='additional-emojis/to-scream.png'>"
+            },
+            {
+                question: "to cry",
+                answer: "<img src='additional-emojis/to-cry.png'>"
+            },
+            {
+                question: "to pee",
+                answer: "<img src='additional-emojis/to-pee.png'>"
+            },
+            {
+                question: "to poo",
+                answer: "<img src='additional-emojis/to-poo.png'>"
+            },
+            {
+                question: "to fart",
+                answer: "<img src='additional-emojis/to-fart.png'>"
+            },
+            {
+                question: "to drive",
+                answer: "<img src='additional-emojis/to-drive.png'>"
+            },
+            {
+                question: "to brush",
+                answer: "<img src='additional-emojis/to-brush.png'>"
+            },
+            {
+                question: "to remember",
+                answer: "<img src='additional-emojis/to-remember.png'>"
+            },
+            {
+                question: "to lead",
+                answer: "<img src='additional-emojis/to-lead.png'>"
+            },
+        ]
+    },
 ];
 
 if (levels.length === 0) {
