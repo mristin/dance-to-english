@@ -640,6 +640,10 @@ const levels = [
                 question: "to lead",
                 answer: "<img src='additional-emojis/to-lead.png'>"
             },
+            {
+                question: "to feel",
+                answer: "<img src='additional-emojis/to-feel.png'>"
+            },
         ]
     },
     {
