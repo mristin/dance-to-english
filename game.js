@@ -921,6 +921,54 @@ const levels = [
             {
                 question: "milk",
                 answer: "<img src='additional-emojis/milk.png'>"
+            },
+            {
+                question: "pumpkin",
+                answer: "<img src='additional-emojis/pumpkin.png'>"
+            },
+            {
+                question: "mushroom",
+                answer: "<img src='additional-emojis/mushroom-for-eating.png'>"
+            },
+            {
+                question: "plum",
+                answer: "<img src='additional-emojis/plum.png'>"
+            },
+            {
+                question: "fig",
+                answer: "<img src='additional-emojis/fig.png'>"
+            },
+            {
+                question: "vegetables",
+                answer: "<img src='additional-emojis/vegetables.png'>"
+            },
+            {
+                question: "fruits",
+                answer: "<img src='additional-emojis/fruits.png'>"
+            },
+            {
+                question: "berries",
+                answer: "<img src='additional-emojis/berries.png'>"
+            },
+            {
+                question: "napkin",
+                answer: "<img src='additional-emojis/napkin.png'>"
+            },
+            {
+                question: "table",
+                answer: "<img src='additional-emojis/table.png'>"
+            },
+            {
+                question: "chair",
+                answer: "<img src='additional-emojis/chair.png'>"
+            },
+            {
+                question: "water bottle",
+                answer: "<img src='additional-emojis/water-bottle.png'>"
+            },
+            {
+                question: "bottle",
+                answer: "<img src='additional-emojis/bottle.png'>"
             }
         ]
     }
