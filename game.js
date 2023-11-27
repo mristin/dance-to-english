@@ -742,6 +742,187 @@ const levels = [
                 answer: "<img src='additional-emojis/to-drive.png'>"
             },
         ]
+    },
+    {
+        name: "Foods and Drinks",
+        vocabulary: [
+            {
+                question: "to eat",
+                answer: "<img src='additional-emojis/to-eat.png'>"
+            },
+            {
+                question: "to drink",
+                answer: "<img src='additional-emojis/to-drink.png'>"
+            },
+            {
+                question: "to smell",
+                answer: "<img src='additional-emojis/to-smell.png'>"
+            },
+            {
+                question: "to taste",
+                answer: "<img src='additional-emojis/to-taste.png'>"
+            },
+            {
+                question: "chicken",
+                answer: "<img src='additional-emojis/chicken-meat.png'>"
+            },
+            {
+                question: "cheese",
+                answer: "<img src='additional-emojis/cheese.png'>"
+            },
+            {
+                question: "meat",
+                answer: "<img src='additional-emojis/meat.png'>"
+            },
+            {question: "fish", answer: "🐟"},
+            {question: "tomato", answer: "🍅"},
+            {question: "carrot", answer: "🥕"},
+            {question: "eggplant", answer: "🍆"},
+            {question: "peas", answer: "🫛"},
+            {
+                question: "zucchini",
+                answer: "<img src='additional-emojis/zucchini.png'>"
+            },
+            {question: "beans", answer: "🫘"},
+            {question: "grapes", answer: "🍇"},
+            {question: "blueberries", answer: "🫐"},
+            {question: "pineapple", answer: "🍍"},
+            {question: "mango", answer: "🥭"},
+            {question: "corn", answer: "🌽"},
+            {question: "popcorn", answer: "🍿"},
+            {question: "potato", answer: "🥔"},
+            {question: "broccoli", answer: "🥦"},
+            {question: "apple", answer: "🍏"},
+            {question: "lemon", answer: "🍋"},
+            {question: "orange", answer: "🍊"},
+            {question: "banana", answer: "🍌"},
+            {question: "pear", answer: "🍐"},
+            {question: "watermelon", answer: "🍉"},
+            {question: "cherries", answer: "🍒"},
+            {question: "strawberry", answer: "🍓"},
+            {
+                question: "raspberry",
+                answer: "<img src='additional-emojis/raspberry.png'>"
+            },
+            {
+                question: "blackberry",
+                answer: "<img src='additional-emojis/blackberry.png'>"
+            },
+            {question: "peach", answer: "🍑"},
+            {question: "kiwi fruit", answer: "🥝"},
+            {question: "cucumber", answer: "🥒"},
+            {question: "melon", answer: "🍈"},
+            {question: "coconut", answer: "🥥"},
+            {question: "chestnut", answer: "🌰"},
+            {question: "onion", answer: "🧅"},
+            {question: "garlic", answer: "🧄"},
+            {question: "olive", answer: "🫒"},
+            {question: "bell pepper", answer: "🫑"},
+            {question: "hot pepper", answer: "🌶"},
+            {question: "pizza", answer: "🍕"},
+            {question: "spaghetti", answer: "🍝"},
+            {question: "rice", answer: "🍚"},
+            {question: "ice cream", answer: "🍨"},
+            {question: "doughnut", answer: "🍩"},
+            {question: "cookie", answer: "🍪"},
+            {question: "cake", answer: "🎂"},
+            {question: "cupcake", answer: "🧁"},
+            {question: "pie", answer: "🥧"},
+            {question: "bread", answer: "🍞"},
+            {question: "croissant", answer: "🥐"},
+            {question: "bacon", answer: "🥓"},
+            {question: "pancakes", answer: "🥞"},
+            {question: "egg", answer: "🥚"},
+            {question: "french fries", answer: "🍟"},
+            {question: "hamburger", answer: "🍔"},
+            {question: "sandwich", answer: "🥪"},
+            {question: "soup", answer: "🍲"},
+            {question: "spoon", answer: "🥄"},
+            {
+                question: "fork",
+                answer: "<img src='additional-emojis/fork.png'>"
+            },
+            {
+                question: "knife",
+                answer: "<img src='additional-emojis/knife-for-eating.png'>"
+            },
+            {
+                question: "plate",
+                answer: "<img src='additional-emojis/plate.png'>"
+            },
+            {
+                question: "bowl",
+                answer: "<img src='additional-emojis/bowl.png'>"
+            },
+            {
+                question: "pot",
+                answer: "<img src='additional-emojis/pot.png'>"
+            },
+            {
+                question: "pan",
+                answer: "<img src='additional-emojis/pan.png'>"
+            },
+            {question: "water", answer: "🚰"},
+            {question: "salt", answer: "🧂"},
+            {
+                question: "pepper",
+                answer: "<img src='additional-emojis/pepper.png'>"
+            },
+            {
+                question: "straw",
+                answer: "<img src='additional-emojis/straw-for-drinking.png'>"
+            },
+            {question: "pretzel", answer: "🥨"},
+            {question: "peanut", answer: "🥜"},
+            {
+                question: "walnut",
+                answer: "<img src='additional-emojis/walnut.png'>"
+            },
+            {
+                question: "hazelnut",
+                answer: "<img src='additional-emojis/hazelnut.png'>"
+            },
+            {
+                question: "juice",
+                answer: "<img src='additional-emojis/juice.png'>"
+            },
+            {question: "lollipop", answer: "🍭"},
+            {question: "tongue", answer: "👅"},
+            {question: "nose", answer: "👃"},
+            {
+                question: "jam",
+                answer: "<img src='additional-emojis/jam.png'>"
+            },
+            {question: "butter", answer: "🧈"},
+            {
+                question: "oil",
+                answer: "<img src='additional-emojis/oil-for-eating.png'>"
+            },
+            {
+                question: "sour",
+                answer: "<img src='additional-emojis/sour.png'>"
+            },
+            {
+                question: "sweet",
+                answer: "<img src='additional-emojis/sweet.png'>"
+            },
+            {
+                question: "breakfast",
+                answer: "<img src='additional-emojis/breakfast.png'>"
+            },
+            {
+                question: "lunch",
+                answer: "<img src='additional-emojis/lunch.png'>"
+            },
+            {
+                question: "dinner",
+                answer: "<img src='additional-emojis/dinner.png'>"
+            },
+            {
+                question: "milk",
+                answer: "<img src='additional-emojis/milk.png'>"
+            }
+        ]
     }
 ];
 
