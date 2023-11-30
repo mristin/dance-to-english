@@ -969,7 +969,212 @@ const levels = [
             {
                 question: "bottle",
                 answer: "<img src='additional-emojis/bottle.png'>"
-            }
+            },
+        ]
+    },
+    {
+        name: "Middle ages",
+        vocabulary: [
+            {
+                question: "castle",
+                answer: "<img src='additional-emojis/castle.png'>"
+            },
+            {
+                question: "fortress",
+                answer: "<img src='additional-emojis/fortress.png'>"
+            },
+            {
+                question: "palace",
+                answer: "<img src='additional-emojis/palace.png'>"
+            },
+            {
+                question: "knight",
+                answer: "<img src='additional-emojis/knight.png'>"
+            },
+            {
+                question: "horse",
+                answer: "<img src='additional-emojis/knights-horse.png'>"
+            },
+            {
+                question: "king",
+                answer: "<img src='additional-emojis/king.png'>"
+            },
+            {
+                question: "queen",
+                answer: "<img src='additional-emojis/queen.png'>"
+            },
+            {
+                question: "princess",
+                answer: "<img src='additional-emojis/princess.png'>"
+            },
+            {
+                question: "prince",
+                answer: "<img src='additional-emojis/prince.png'>"
+            },
+            {
+                question: "sword",
+                answer: "<img src='additional-emojis/sword.png'>"
+            },
+            {
+                question: "shield",
+                answer: "<img src='additional-emojis/shield.png'>"
+            },
+            {
+                question: "shield",
+                answer: "<img src='additional-emojis/shield.png'>"
+            },
+            {
+                question: "armor",
+                answer: "<img src='additional-emojis/knights-armor.png'>"
+            },
+            {
+                question: "helmet",
+                answer: "<img src='additional-emojis/knights-helmet.png'>"
+            },
+            {
+                question: "mace",
+                answer: "<img src='additional-emojis/mace.png'>"
+            },
+            {
+                question: "stirrup",
+                answer: "<img src='additional-emojis/stirrup.png'>"
+            },
+            {
+                question: "reins",
+                answer: "<img src='additional-emojis/reins.jpg'>"
+            },
+            {
+                question: "halter",
+                answer: "<img src='additional-emojis/horse-halter.jpg'>"
+            },
+            {
+                question: "saddle",
+                answer: "<img src='additional-emojis/horse-saddle.png'>"
+            },
+            {
+                question: "catapult",
+                answer: "<img src='additional-emojis/catapult.png'>"
+            },
+            {
+                question: "bow",
+                answer: "<img src='additional-emojis/archers-bow.png'>"
+            },
+            {
+                question: "arrow",
+                answer: "<img src='additional-emojis/archers-arrow.png'>"
+            },
+            {
+                question: "crossbow",
+                answer: "<img src='additional-emojis/crossbow.png'>"
+            },
+            {
+                question: "spear",
+                answer: "<img src='additional-emojis/spear.png'>"
+            },
+            {
+                question: "sabre",
+                answer: "<img src='additional-emojis/sabre.png'>"
+            },
+            {
+                question: "katana",
+                answer: "<img src='additional-emojis/katana.png'>"
+            },
+            {
+                question: "boots",
+                answer: "<img src='additional-emojis/boots.png'>"
+            },
+            {
+                question: "cannon",
+                answer: "<img src='additional-emojis/cannon.png'>"
+            },
+            {
+                question: "cannonball",
+                answer: "<img src='additional-emojis/cannonball.png'>"
+            },
+            {
+                question: "pistol",
+                answer: "<img src='additional-emojis/medieval-pistol.png'>"
+            },
+            {
+                question: "gun",
+                answer: "<img src='additional-emojis/medieval-gun.png'>"
+            },
+            {
+                question: "galley",
+                answer: "<img src='additional-emojis/galley.png'>"
+            },
+            {
+                question: "fleet",
+                answer: "<img src='additional-emojis/fleet.png'>"
+            },
+            {
+                question: "torch",
+                answer: "<img src='additional-emojis/torch.png'>"
+            },
+            {
+                question: "throne",
+                answer: "<img src='additional-emojis/throne.png'>"
+            },
+            {
+                question: "moat",
+                answer: "<img src='additional-emojis/moat.png'>"
+            },
+            {
+                question: "bridge",
+                answer: "<img src='additional-emojis/castle-bridge.png'>"
+            },
+            {
+                question: "gate",
+                answer: "<img src='additional-emojis/castle-gate.png'>"
+            },
+            {
+                question: "guard",
+                answer: "<img src='additional-emojis/castle-guard.png'>"
+            },
+            {
+                question: "tower",
+                answer: "<img src='additional-emojis/castle-tower.png'>"
+            },
+            {
+                question: "kingdom",
+                answer: "<img src='additional-emojis/medieval-kingdom.png'>"
+            },
+            {
+                question: "kingdom",
+                answer: "<img src='additional-emojis/medieval-kingdom.png'>"
+            },
+            {
+                question: "nobleman",
+                answer: "<img src='additional-emojis/medieval-nobleman.png'>"
+            },
+            {
+                question: "emperor",
+                answer: "<img src='additional-emojis/emperor.png'>"
+            },
+            {
+                question: "empress",
+                answer: "<img src='additional-emojis/empress.png'>"
+            },
+            {
+                question: "empire",
+                answer: "<img src='additional-emojis/empire.png'>"
+            },
+            {
+                question: "servant",
+                answer: "<img src='additional-emojis/servant.png'>"
+            },
+            {
+                question: "peasant",
+                answer: "<img src='additional-emojis/peasant.png'>"
+            },
+            {
+                question: "robber",
+                answer: "<img src='additional-emojis/robber.png'>"
+            },
+            {
+                question: "thief",
+                answer: "<img src='additional-emojis/thief.png'>"
+            },
         ]
     }
 ];
@@ -994,6 +1199,25 @@ function assertEachLevelAtLeastTwoCards() {
 
 assertEachLevelAtLeastTwoCards();
 
+function logAllQuestionsForAdaptationsToOtherLanguages() {
+    // NOTE (mristin):
+    // We log all the questions across all the levels facilitate adaptations
+    // to other languages.
+    const parts = [];
+    for (let i = 0; i < levels.length; i++) {
+        const level = levels[i];
+
+        parts.push(`Level ${i}: ${level.name}\n`);
+
+        for (let j = 0; j < level.vocabulary.length; j++) {
+            const questionAnswer = level.vocabulary[j];
+            parts.push(`Question ${j}: ${questionAnswer.question}\n`);
+        }
+    }
+
+    console.log(parts.join(""))
+}
+logAllQuestionsForAdaptationsToOtherLanguages();
 
 // NOTE (mristin):
 // We distinguish between three types of states.
@@ -1224,8 +1448,6 @@ function generateButtonMapping() {
 }
 
 const buttonIndices = generateButtonMapping();
-
-console.log("The button mapping is:", buttonIndices)
 
 /**
  * Let the user select the level.
