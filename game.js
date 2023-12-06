@@ -1176,6 +1176,207 @@ const levels = [
                 answer: "<img src='additional-emojis/thief.png'>"
             },
         ]
+    },
+    {
+        name: "Body parts",
+        vocabulary: [
+            {
+                question: "leg",
+                answer: "<img src='additional-emojis/leg.png'>"
+            },
+            {
+                question: "arm",
+                answer: "<img src='additional-emojis/arm.png'>"
+            },
+            {
+                question: "hand",
+                answer: "<img src='additional-emojis/hand.png'>"
+            },
+            {
+                question: "palm",
+                answer: "<img src='additional-emojis/hand-palm.png'>"
+            },
+            {
+                question: "head",
+                answer: "<img src='additional-emojis/head.png'>"
+            },
+            {
+                question: "brain",
+                answer: "<img src='additional-emojis/brain.png'>"
+            },
+            {
+                question: "nose",
+                answer: "<img src='additional-emojis/nose.png'>"
+            },
+            {
+                question: "mouth",
+                answer: "<img src='additional-emojis/mouth.png'>"
+            },
+            {
+                question: "lips",
+                answer: "<img src='additional-emojis/lips.png'>"
+            },
+            {
+                question: "foot",
+                answer: "<img src='additional-emojis/foot.png'>"
+            },
+            {
+                question: "sole",
+                answer: "<img src='additional-emojis/foot-sole.png'>"
+            },
+            {
+                question: "heel",
+                answer: "<img src='additional-emojis/heel-pain.png'>"
+            },
+            {
+                question: "elbow",
+                answer: "<img src='additional-emojis/elbow.png'>"
+            },
+            {
+                question: "knee",
+                answer: "<img src='additional-emojis/knee.png'>"
+            },
+            {
+                question: "penis",
+                answer: "<img src='additional-emojis/penis.png'>"
+            },
+            {
+                question: "vulva",
+                answer: "<img src='additional-emojis/vulva.png'>"
+            },
+            {
+                question: "bottom",
+                answer: "<img src='additional-emojis/butt.png'>"
+            },
+            {
+                question: "stomach",
+                answer: "<img src='additional-emojis/stomach.png'>"
+            },
+            {
+                question: "belly",
+                answer: "<img src='additional-emojis/belly.png'>"
+            },
+            {
+                question: "shoulder",
+                answer: "<img src='additional-emojis/shoulder.png'>"
+            },
+            {
+                question: "tongue",
+                answer: "<img src='additional-emojis/tongue.png'>"
+            },
+            {
+                question: "tooth",
+                answer: "<img src='additional-emojis/tooth.png'>"
+            },
+            {
+                question: "teeth",
+                answer: "<img src='additional-emojis/teeth.png'>"
+            },
+            {
+                question: "chest",
+                answer: "<img src='additional-emojis/body-chest.png'>"
+            },
+            {
+                question: "eye",
+                answer: "<img src='additional-emojis/eye.png'>"
+            },
+            {
+                question: "hair",
+                answer: "<img src='additional-emojis/hair.png'>"
+            },
+            {
+                question: "back",
+                answer: "<img src='additional-emojis/body-back.png'>"
+            },
+            {
+                question: "ankle",
+                answer: "<img src='additional-emojis/ankle.png'>"
+            },
+            {
+                question: "wrist",
+                answer: "<img src='additional-emojis/wrist.png'>"
+            },
+            {
+                question: "breast",
+                answer: "<img src='additional-emojis/breast.png'>"
+            },
+            {
+                question: "finger",
+                answer: "<img src='additional-emojis/finger.png'>"
+            },
+            {
+                question: "toe",
+                answer: "<img src='additional-emojis/toe.png'>"
+            },
+            {
+                question: "paw",
+                answer: "<img src='additional-emojis/paw.png'>"
+            },
+            {
+                question: "tail",
+                answer: "<img src='additional-emojis/tail.png'>"
+            },
+            {
+                question: "claw",
+                answer: "<img src='additional-emojis/claw.png'>"
+            },
+            {
+                question: "torso",
+                answer: "<img src='additional-emojis/torso.png'>"
+            },
+            {
+                question: "beak",
+                answer: "<img src='additional-emojis/beak.png'>"
+            },
+            {
+                question: "mane",
+                answer: "<img src='additional-emojis/mane.png'>"
+            },
+            {
+                question: "cheek",
+                answer: "<img src='additional-emojis/cheek.png'>"
+            },
+            {
+                question: "eyebrow",
+                answer: "<img src='additional-emojis/eyebrow.png'>"
+            },
+            {
+                question: "eyelashes",
+                answer: "<img src='additional-emojis/eyelashes.png'>"
+            },
+            {
+                question: "neck",
+                answer: "<img src='additional-emojis/neck.png'>"
+            },
+            {
+                question: "throat",
+                answer: "<img src='additional-emojis/throat.png'>"
+            },
+            {
+                question: "lungs",
+                answer: "<img src='additional-emojis/lungs.png'>"
+            },
+            {
+                question: "heart",
+                answer: "<img src='additional-emojis/heart.png'>"
+            },
+            {
+                question: "blood",
+                answer: "<img src='additional-emojis/blood.png'>"
+            },
+            {
+                question: "mucus",
+                answer: "<img src='additional-emojis/mucus.png'>"
+            },
+            {
+                question: "tear",
+                answer: "<img src='additional-emojis/tear.png'>"
+            },
+            {
+                question: "sweat",
+                answer: "<img src='additional-emojis/sweat.png'>"
+            },
+        ]
     }
 ];
 
@@ -1217,6 +1418,7 @@ function logAllQuestionsForAdaptationsToOtherLanguages() {
 
     console.log(parts.join(""))
 }
+
 logAllQuestionsForAdaptationsToOtherLanguages();
 
 // NOTE (mristin):
