@@ -1410,7 +1410,7 @@ const levels = [
                 answer: "<img src='additional-emojis/school-bag.png'>"
             },
             {
-                question: "school",
+                question: "pencil",
                 answer: "✏"
             },
             {
