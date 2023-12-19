@@ -1377,6 +1377,119 @@ const levels = [
                 answer: "<img src='additional-emojis/sweat.png'>"
             },
         ]
+    },
+    {
+        name: "School",
+        vocabulary: [
+            {
+                question: "school",
+                answer: "🏫"
+            },
+            {
+                question: "teacher",
+                answer: "<img src='additional-emojis/teacher.png'>"
+            },
+            {
+                question: "blackboard",
+                answer: "<img src='additional-emojis/blackboard.png'>"
+            },
+            {
+                question: "desk",
+                answer: "<img src='additional-emojis/desk.png'>"
+            },
+            {
+                question: "chair",
+                answer: "<img src='additional-emojis/office-chair.png'>"
+            },
+            {
+                question: "student",
+                answer: "<img src='additional-emojis/student.png'>"
+            },
+            {
+                question: "school bag",
+                answer: "<img src='additional-emojis/school-bag.png'>"
+            },
+            {
+                question: "school",
+                answer: "✏"
+            },
+            {
+                question: "eraser",
+                answer: "<img src='additional-emojis/eraser.png'>"
+            },
+            {
+                question: "pen",
+                answer: "<img src='additional-emojis/pen.png'>"
+            },
+            {
+                question: "sheet of paper",
+                answer: "<img src='additional-emojis/sheet-of-paper.png'>"
+            },
+            {
+                question: "notebook",
+                answer: "📔"
+            },
+            {
+                question: "ruler",
+                answer: "📏"
+            },
+            {
+                question: "book",
+                answer: "📖"
+            },
+            {
+                question: "abacus",
+                answer: "🧮"
+            },
+            {
+                question: "mathematics",
+                answer: "<img src='additional-emojis/mathematics.png'>"
+            },
+            {
+                question: "music",
+                answer: "<img src='additional-emojis/music-lesson.png'>"
+            },
+            {
+                question: "sports",
+                answer: "<img src='additional-emojis/sports-lesson.png'>"
+            },
+            {
+                question: "peer",
+                answer: "<img src='additional-emojis/school-peer.png'>"
+            },
+            {
+                question: "drawing compass",
+                answer: "<img src='additional-emojis/drawing-compass.png'>"
+            },
+            {
+                question: "marker",
+                answer: "<img src='additional-emojis/marker.png'>"
+            },
+            {
+                question: "school yard",
+                answer: "<img src='additional-emojis/school-yard.png'>"
+            },
+            {
+                question: "school gym",
+                answer: "<img src='additional-emojis/school-gym.jpg'>"
+            },
+            {
+                question: "class room",
+                answer: "<img src='additional-emojis/class-room.png'>"
+            },
+            {
+                question: "scissors",
+                answer: "✂"
+            },
+            {
+                question: "pencil case",
+                answer: "<img src='additional-emojis/pencil-case.png'>"
+            },
+            {
+                question: "glasses",
+                answer: "👓"
+            }
+        ]
     }
 ];
 
