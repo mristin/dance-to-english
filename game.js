@@ -1,3 +1,5 @@
+// noinspection HtmlRequiredAltAttribute
+
 console.log("Navigator platform is", navigator.platform)
 console.log("User agent is", navigator.userAgent)
 
@@ -36,7 +38,9 @@ function determineAndLogBrowser() {
 
 determineAndLogBrowser()
 
-const thiefMaxDistance = 5;
+import * as bodyPose from "./bodyPose.js";
+
+const thiefMaxDistance = 10;
 
 /**
  * @typedef {Object} Card
@@ -1563,6 +1567,16 @@ logAllQuestionsForAdaptationsToOtherLanguages();
  */
 
 /**
+ * Handle the hand raise.
+ * @function
+ * @name IDialogue#onHandRaised
+ * @param {number} handEvent to be handled
+ * @param {number} timestamp of the recognized video frame
+ * @returns {void}
+ */
+
+
+/**
  * Update the dialogue state based on the timestamp.
  * @function
  * @name IDialogue#tick
@@ -1574,14 +1588,6 @@ logAllQuestionsForAdaptationsToOtherLanguages();
  * Refresh the game container based on the dialogue's state.
  * @function
  * @name IDialogue#refresh
- * @returns {void}
- */
-
-/**
- * React on the gamepad button pressed.
- * @function
- * @name IDialogue#onGamepadButtonPressed
- * @param {number} buttonIndex which gamepad button has been pressed
  * @returns {void}
  */
 
@@ -1618,11 +1624,11 @@ Click here when you are ready to start.
         };
     }
 
-    onGamepadButtonPressed(buttonIndex) {
+    refresh() {
         // Intentionally empty.
     }
 
-    refresh() {
+    onHandRaised(handEvent, timestamp) {
         // Intentionally empty.
     }
 
@@ -1655,10 +1661,6 @@ Waiting for the speech synthesis to initialize...
         // Intentionally empty.
     }
 
-    onGamepadButtonPressed(buttonIndex) {
-        // Intentionally empty.
-    }
-
     refresh() {
         const messageDiv = document.getElementById("message");
         const dots = [];
@@ -1673,11 +1675,15 @@ Waiting for the speech synthesis to initialize...
         )
     }
 
+    onHandRaised(handEvent, timestamp) {
+        // Intentionally empty.
+    }
+
     tick(timestamp) {
         if (this.lastTick === null || timestamp - this.lastTick > 1000) {
             if (window.speechSynthesis.getVoices().length > 0) {
                 setupSpeechSynthesis();
-                dialoguer.put(new DialogueSelectLevel());
+                dialoguer.put(new DialogueAskForVideo());
             } else {
                 this.retries--;
 
@@ -1712,11 +1718,11 @@ internet connection and your browser needs one for speech synthesis?
         // Intentionally empty.
     }
 
-    onGamepadButtonPressed(buttonIndex) {
+    refresh() {
         // Intentionally empty.
     }
 
-    refresh() {
+    onHandRaised(handEvent, timestamp) {
         // Intentionally empty.
     }
 
@@ -1730,39 +1736,96 @@ internet connection and your browser needs one for speech synthesis?
 }
 
 /**
- * @typedef ButtonMapping
- * @property {number} left
- * @property {number} right
- * @property {number} start
+ * Ask the user for video and start recognizing.
+ * @implements IDialogue
  */
+class DialogueAskForVideo {
+    initialHTML() {
+        return `<div id="message" class="announcement">
+Waiting for the video recognition to initialize...
+</div>`;
+    }
 
+    mount() {
+        const args = {
+            container: document.getElementById("video-container"),
+            width: 280,
+            height: 160,
+            callback: function (pose, timestamp) {
+                // Intentionally empty, only for initialization.
+            }
+        };
 
-/**
- * @returns {ButtonMapping}
- */
-function generateButtonMapping() {
-    if (navigator.platform === "MacIntel") {
-        return {
-            left: 3,
-            right: 2,
-            start: 9
+        const handler = bodyPose.newHandRaisingHandler(
+            systemState.onHandRaised
+        );
+
+        args.callback = function (pose, timestamp) {
+            // We switch to the actual handler on the first recognized frame.
+            handler(pose, timestamp);
+
+            args.callback = handler;
+            dialoguer.put(new DialogueSelectLevel());
         }
-    } else if (navigator.platform === "Linux x86_64") {
-        return {
-            left: 0,
-            right: 3,
-            start: 9
-        }
-    } else {
-        return {
-            left: 3,
-            right: 2,
-            start: 9
-        }
+
+        bodyPose
+            .initializeRecognition(args)
+            .catch((error) => {
+                console.error("Error with the video recognition:", error);
+                dialoguer.put(new DialogueNoVideoRecognition());
+            });
+    }
+
+    refresh() {
+        // Intentionally empty.
+    }
+
+    onHandRaised(handEvent, timestamp) {
+        // Intentionally empty.
+    }
+
+    tick(timestamp) {
+        // Intentionally empty.
+    }
+
+    unmount() {
+        // Intentionally empty.
     }
 }
 
-const buttonIndices = generateButtonMapping();
+/**
+ * Inform the user that the game can not be played as there is no video
+ * recognition.
+ * @implements IDialogue
+ */
+class DialogueNoVideoRecognition {
+    initialHTML() {
+        return `<div class='announcement'>
+No video recognition is available in your browser. Perhaps you have no 
+internet connection or you did not allow video access?
+</div>`;
+    }
+
+    mount() {
+        // Intentionally empty.
+    }
+
+    refresh() {
+        // Intentionally empty.
+    }
+
+    onHandRaised(handEvent, timestamp) {
+        // Intentionally empty.
+    }
+
+    tick(timestamp) {
+        // Intentionally empty.
+    }
+
+    unmount() {
+        // Intentionally empty.
+    }
+}
 
 /**
  * Let the user select the level.
@@ -1788,6 +1851,9 @@ Select the level:
 >${level.name}</button>`
             )
         }
+
+        // TODO: add instructions
+
         return parts.join("\n");
     }
 
@@ -1845,13 +1911,15 @@ Select the level:
         this.announceLevel();
     }
 
-    onGamepadButtonPressed(buttonIndex) {
-        if (buttonIndex === buttonIndices.left) {
+    onHandRaised(handEvent, _) {
+        if (handEvent === bodyPose.HandEvent.LeftRaised) {
             this.changeSelection(-1);
-        } else if (buttonIndex === buttonIndices.right) {
+        } else if (handEvent === bodyPose.HandEvent.RightRaised) {
             this.changeSelection(+1);
-        } else if (buttonIndex === buttonIndices.start) {
+        } else if (handEvent === bodyPose.HandEvent.BothRaised) {
             this.startTheGame();
+        } else {
+            // Pass.
         }
     }
 
@@ -1908,11 +1976,11 @@ class DialogueHello {
             );
     }
 
-    onGamepadButtonPressed(buttonIndex) {
+    refresh() {
         // Intentionally empty.
     }
 
-    refresh() {
+    onHandRaised(handEvent, timestamp) {
         // Intentionally empty.
     }
 
@@ -2136,7 +2204,7 @@ class DialoguePlay {
                 dialoguer.put(new DialogueBravo())
             } else {
                 console.log(
-                    `The question at index {this.questionIndex} has been ` +
+                    `The question at index ${this.questionIndex} has been ` +
                     `answered correctly.`
                 )
                 this.questionIndex = (
@@ -2204,12 +2272,12 @@ class DialoguePlay {
         this.askTheQuestion()
     }
 
-    onGamepadButtonPressed(buttonIndex) {
-        if (buttonIndex === buttonIndices.left) {
+    onHandRaised(handEvent, _) {
+        if (handEvent === bodyPose.HandEvent.LeftRaised) {
             this.answer(0);
-        } else if (buttonIndex === buttonIndices.right) {
+        } else if (handEvent === bodyPose.HandEvent.RightRaised) {
             this.answer(1);
-        } else if (buttonIndex === buttonIndices.start) {
+        } else if (handEvent === bodyPose.HandEvent.BothRaised) {
             this.restart();
         } else {
             // Pass.
@@ -2375,15 +2443,11 @@ class DialogueBravo {
 
     }
 
-    onGamepadButtonPressed(buttonIndex) {
-        if (buttonIndex === buttonIndices.start) {
-            this.restart();
-        } else {
-            // Pass.
-        }
+    refresh() {
+        // Intentionally empty.
     }
 
-    refresh() {
+    onHandRaised(handEvent, timestamp) {
         // Intentionally empty.
     }
 
@@ -2428,11 +2492,14 @@ class Dialoguer {
 const dialoguer = new Dialoguer();
 
 const systemState = {
-    gamepads: [],
-    activeGamepadIndex: null,
     speechSynthesisVoice: null,
-    buttonsPressed: null,
-    buttonsPressTimestamps: null
+    onHandRaised: function(handEvent, timestamp) {
+        console.log("Hand event observed: ", handEvent);
+
+        if (dialoguer.dialogue !== null) {
+            dialoguer.dialogue.onHandRaised(handEvent, timestamp);
+        }
+    }
 }
 
 const gameState = {
@@ -2524,7 +2591,6 @@ function updateInnerHTMLIfNeeded(element, code) {
     const canonicalized = dummyElementForHTMLCanonicalization.innerHTML;
 
     if (canonicalized !== element.innerHTML) {
-        console.log("rendered")
         element.innerHTML = canonicalized;
     }
 }
@@ -2562,178 +2628,15 @@ function removeClassIfNeeded(element, cls) {
     }
 }
 
-function changeActiveGamepad() {
-    /**
-     * @type {HTMLSelectElement}
-     */
-    const gamepadSelect = document.getElementById("gamepad-select");
-    systemState.activeGamepadIndex = parseInt(gamepadSelect.value);
-}
-
-function updateGamepads() {
-    /**
-     * @type {Gamepad[]}
-     */
-    let gamepads = navigator.getGamepads().filter(gamepad => gamepad !== null);
-
-    gamepads.sort((a, b) => a.index - b.index);
-
-    systemState.gamepads = gamepads;
-
-    if (systemState.gamepads.length === 0) {
-        systemState.activeGamepadIndex = null;
-    } else {
-        let foundActiveAgain = false;
-
-        for (let i = 0; i < gamepads.length; i++) {
-            if (gamepads[i].index === systemState.activeGamepadIndex) {
-                foundActiveAgain = true;
-                break;
-            }
-        }
-
-        if (!foundActiveAgain) {
-            systemState.activeGamepadIndex = systemState.gamepads[0].index;
-        }
-    }
-}
-
-/**
- * Handle the button presses at the system level.
- * @param {number} buttonIndex
- */
-function reactOnButtonPress(buttonIndex) {
-    if (dialoguer.dialogue !== null) {
-        dialoguer.dialogue.onGamepadButtonPressed(buttonIndex)
-    }
-}
-
-/**
- * Handle the change of the active gamepad at the system level.
- * @param {number} timestamp from the frame refresh
- */
-function reactOnActiveGamepad(timestamp) {
-    if (systemState.gamepads.length === 0) {
-        return;
-    }
-
-    if (systemState.activeGamepadIndex === null) {
-        throw new Error("Unexpected null for active gamepad index when gamepads are not empty")
-    }
-
-    /**
-     * @type Gamepad
-     */
-    const gamepad = systemState.gamepads[systemState.activeGamepadIndex];
-
-    const newButtonsPressed = gamepad.buttons.map(button => button.pressed);
-
-    /**
-     * React on the button presses at the end of this function since we are changing the state and this is not
-     * a good idea to react on event *before* the state is in a valid shape.
-     * @type {Array<number>}
-     */
-    const buttonPresses = [];
-
-    if (systemState.buttonsPressed === null || systemState.buttonsPressed.length !== newButtonsPressed.length) {
-        systemState.buttonsPressTimestamps = newButtonsPressed.map(() => 0);
-
-        for (let i = 0; i < newButtonsPressed.length; i++) {
-            if (newButtonsPressed[i]) {
-                systemState.buttonsPressTimestamps[i] = timestamp;
-                buttonPresses.push(i);
-            }
-        }
-
-        systemState.buttonsPressed = newButtonsPressed;
-    } else {
-        if (systemState.buttonsPressTimestamps === null) {
-            throw new Error("Buttons press-timestamps must be set when buttons pressed is set.")
-        }
-
-        if (systemState.buttonsPressTimestamps.length !== systemState.buttonsPressed.length) {
-            throw new Error(
-                "Expected length of button press-timestamps to match " +
-                systemState.buttonsPressed.left +
-                ", i.e., buttons pressed, but got: " +
-                systemState.buttonsPressTimestamps.length
-            )
-        }
-
-
-        for (let i = 0; i < newButtonsPressed.length; i++) {
-            if (newButtonsPressed[i] && !systemState.buttonsPressed[i]) {
-                const oldTimestamp = systemState.buttonsPressTimestamps[i]
-                const delta = timestamp - oldTimestamp;
-
-                // NOTE (mristin):
-                // Debounce after a second
-                if (delta > 1000) {
-                    systemState.buttonsPressTimestamps[i] = timestamp;
-                    buttonPresses.push(i);
-                }
-            }
-        }
-
-        systemState.buttonsPressed = newButtonsPressed;
-    }
-
-    if (systemState.buttonsPressed === null) {
-        throw new Error("Unexpected unset buttons pressed at the end of react-on-active-gamepad.")
-    }
-
-    if (systemState.buttonsPressTimestamps === null) {
-        throw new Error("Unexpected unset buttons press-timestamps at the end of react-on-active-gamepad.")
-    }
-
-    if (buttonPresses.length > 0) {
-        console.log("The following buttons are pressed", buttonPresses)
-    }
-    for (let i = 0; i < buttonPresses.length; i++) {
-        reactOnButtonPress(buttonPresses[i]);
-    }
-}
-
-function refreshGamepads() {
-    /**
-     * @type {HTMLSelectElement}
-     */
-    const gamepadSelect = document.getElementById("gamepad-select");
-    gamepadSelect.innerHTML = "";
-
-    for (let i = 0; i < systemState.gamepads.length; i++) {
-        const gamepad = systemState.gamepads[i];
-
-        /**
-         * @type {HTMLOptionElement}
-         */
-        let option = document.createElement("option");
-
-        if (gamepad.index === systemState.activeGamepadIndex) {
-            option.selected = true;
-        }
-        option.text = gamepad.id;
-        option.value = gamepad.index.toString();
-
-        gamepadSelect.add(option);
-    }
-}
-
-
 /**
  * Handle every frame redrawing.
  * @param {number} timestamp
  */
 function handleFrame(timestamp) {
-    updateGamepads();
-    reactOnActiveGamepad(timestamp);
-
     if (dialoguer.dialogue !== null) {
         dialoguer.dialogue.tick(timestamp);
         dialoguer.dialogue.refresh();
     }
-
-    refreshGamepads();
 
     requestAnimationFrame(handleFrame);
 }
