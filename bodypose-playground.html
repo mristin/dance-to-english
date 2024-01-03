@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Body pose playground</title>
+
+    <script type="module">
+        import * as bodyPose from "./bodyPose.js";
+
+        import * as tasksVision
+            from "https://cdn.skypack.dev/@mediapipe/tasks-vision@0.10.0";
+
+        /**
+         * Capture the hands raised in a frame.
+         */
+        class HandsRaised {
+            /**
+             * @param {boolean} left set if left hand raised
+             * @param {boolean} right set if right hand raised
+             */
+            constructor(left, right) {
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+        /**
+         * Compute which hand is raised.
+         * 
+         * @param {tasksVision.NormalizedLandmark[]} pose
+         * @param {number} timestamp of the frame
+         * @return {HandsRaised|null}
+         */
+        function determineHandsRaised(pose, timestamp) {
+            // NOTE (mristin):
+            // See: https://developers.google.com/mediapipe/solutions/vision/pose_landmarker#pose_landmarker_model
+            // for landmark indices.
+
+            const leftShoulder = pose[11];
+            const rightShoulder = pose[12];
+
+            const leftElbow = pose[13];
+            const rightElbow = pose[14];
+
+            // NOTE (mristin):
+            // If one of the shoulders is invisible, we can not determine
+            // the angle between the elbows and the shoulders.
+            if (
+                leftShoulder.x < 0.0 
+                || leftShoulder.x > 1.0
+                || leftShoulder.y < 0.0
+                || leftShoulder.y > 1.0
+                || rightShoulder.x < 0.0
+                || rightShoulder.x > 1.0
+                || rightShoulder.y < 0.0
+                || rightShoulder.y > 1.0
+            ) {
+                return null;
+            }
+
+            // NOTE (mristin):
+            // The model seems to be robust even if the elbow is not in
+            // the frame, so we still compute the angle when the elbows
+            // are invisible.
+
+            // NOTE (mristin):
+            // We negate the y-direction as the poses are given with
+            // the y-axis pointing down.
+
+            const leftVectorX = leftElbow.x - leftShoulder.x;
+            const leftVectorY = -(leftElbow.y - leftShoulder.y);
+
+            const leftAngleRad = Math.atan2(leftVectorY, leftVectorX);
+            const leftAngleDeg = leftAngleRad * (180.0 / Math.PI);
+
+            const rightVectorX = rightElbow.x - rightShoulder.x;
+            const rightVectorY = -(rightElbow.y - rightShoulder.y);
+
+            const rightAngleRad = Math.atan2(rightVectorY, rightVectorX);
+            const rightAngleDeg = rightAngleRad * (180.0 / Math.PI);
+
+            const leftHandRaised = leftAngleDeg > 5.0;
+            const rightHandRaised = (
+                rightAngleDeg > 0.0
+                && rightAngleDeg < 175.0
+            );
+
+            return new HandsRaised(leftHandRaised, rightHandRaised);
+        }
+
+        window.onload = function () {
+            const leftHandElement = document.getElementById("left-hand");
+            const rightHandElement = document.getElementById("right-hand");
+
+            bodyPose.initializeRecognition(
+                {
+                    width: 480,
+                    height: 360,
+                    container: document.getElementById("video-container"),
+                    callback: function(pose, _) {
+                        const handsRaised = determineHandsRaised(pose);
+                        if (handsRaised === null){
+                            leftHandElement.innerText = "N/A";
+                            rightHandElement.innerText = "N/A";
+                            return;
+                        }
+
+                        if (handsRaised.left) {
+                            leftHandElement.innerText = "Up"
+                        } else {
+                            leftHandElement.innerText = "Down"
+                        }
+
+                        if (handsRaised.right) {
+                            rightHandElement.innerText = "Up"
+                        } else {
+                            rightHandElement.innerText = "Down"
+                        }
+                    }
+                }
+            );
+        }
+    </script>
+</head>
+<body>
+<div id="video-container"></div>
+
+<div id="hands">
+    Left: <span id="left-hand" style="width: 10em">N/A</span>
+    Right: <span id="right-hand" style="width: 10em">N/A</span>
+</div>
+</body>
+</html>

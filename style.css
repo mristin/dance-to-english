@@ -77,9 +77,17 @@
     font-size: 4em;
 }
 
-#gamepad-container {
+#video-container {
     border-top: 1px solid black;
     padding-top: 0.5em;
+    margin-top: 3em;
+}
+
+#instructions img {
+    height: 2em;
+}
+
+#instructions {
     margin-top: 3em;
 }
 

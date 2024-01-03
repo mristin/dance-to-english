@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>dance-to-english</title>
-    <script src="game.js"></script>
+    <script src="game.js" type="module"></script>
     <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
 <div id="container">
     <div id="game-container"></div>
-    <div id="gamepad-container">
-        <label for="gamepad-select">
-            Gamepad to use (please press any button to make the gamepad visible to the browser):
-        </label>
-        <select id="gamepad-select" onselect="changeActiveGamepad();">
-        </select>
+    <div id="video-container"></div>
+    <div id="instructions">
+        <img src="icons/raised-both.png"> - Start,
+        <img src="icons/raised-left.png"> - Go left,
+        <img src="icons/raised-right.png"> - Go right
+        </div>
     </div>
 </div>
 </body>
