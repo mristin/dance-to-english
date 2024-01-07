@@ -2448,7 +2448,9 @@ class DialogueBravo {
     }
 
     onHandRaised(handEvent, timestamp) {
-        // Intentionally empty.
+        if (handEvent === bodyPose.HandEvent.BothRaised) {
+            this.restart();
+        }
     }
 
     tick(timestamp) {
@@ -2493,7 +2495,7 @@ const dialoguer = new Dialoguer();
 
 const systemState = {
     speechSynthesisVoice: null,
-    onHandRaised: function(handEvent, timestamp) {
+    onHandRaised: function (handEvent, timestamp) {
         console.log("Hand event observed: ", handEvent);
 
         if (dialoguer.dialogue !== null) {
