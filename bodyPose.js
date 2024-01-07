@@ -84,6 +84,21 @@ export async function initializeRecognition(args) {
 
     let lastVideoTimeMs = -1;
 
+    const connections = [
+        {start: 11, end: 12},
+        {start: 11, end: 13},
+        {start: 13, end: 15},
+        {start: 12, end: 14},
+        {start: 14, end: 16},
+        {start: 12, end: 24},
+        {start: 11, end: 23},
+        {start: 24, end: 23},
+        {start: 24, end: 26},
+        {start: 26, end: 28},
+        {start: 23, end: 25},
+        {start: 25, end: 27}
+    ];
+
     async function predictWebcam() {
         let startTimeMs = window.performance.now();
         if (lastVideoTimeMs !== video.currentTime) {
@@ -97,18 +112,9 @@ export async function initializeRecognition(args) {
                         0, 0, canvasElement.width, canvasElement.height
                     );
                     for (const pose of result.landmarks) {
-                        drawingUtils.drawLandmarks(
-                            pose,
-                            {
-                                radius: (data) =>
-                                    tasksVision.DrawingUtils.lerp(
-                                        data.from.z, -0.15, 0.1, 5, 1
-                                    )
-                            }
-                        );
                         drawingUtils.drawConnectors(
                             pose,
-                            tasksVision.PoseLandmarker.POSE_CONNECTIONS
+                            connections
                         );
                     }
                     canvasCtx.restore();
@@ -274,7 +280,7 @@ export function newHandRaisingHandler(callback) {
         while (
             statusWindow.length > 0
             && timestamp - statusWindow[0].timestamp > 1
-        ) {
+            ) {
             statusWindow.shift();
         }
         statusWindow.push({status: status, timestamp: timestamp});
@@ -292,7 +298,7 @@ export function newHandRaisingHandler(callback) {
         for (const timestampedStatus of statusWindow) {
             if (timestampedStatus.status === null) {
                 // No hand state is recognized, pass.
-            } else if(
+            } else if (
                 timestampedStatus.status.left
                 && !timestampedStatus.status.right
             ) {
@@ -307,7 +313,7 @@ export function newHandRaisingHandler(callback) {
                 && timestampedStatus.status.right
             ) {
                 bothUpCount++;
-            } else if(
+            } else if (
                 !timestampedStatus.status.left
                 && !timestampedStatus.status.right
             ) {
@@ -326,9 +332,9 @@ export function newHandRaisingHandler(callback) {
         const threshold = Math.round(statusWindow.length * 0.8);
         if (leftUpCount > threshold) {
             newState = State.leftUp;
-        } else if(rightUpCount > threshold) {
+        } else if (rightUpCount > threshold) {
             newState = State.rightUp;
-        } else if(bothUpCount > threshold) {
+        } else if (bothUpCount > threshold) {
             newState = State.bothUp;
         } else {
             newState = State.down;
